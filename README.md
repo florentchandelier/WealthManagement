@@ -18,7 +18,7 @@ and/or tax advise and are not responsible for advising him/her on the laws perta
 ```python
 We expressly disclaims all liability for the use or interpretation by others of information contained in this website. 
 Decisions based on information contained herein are the sole responsibility of the reader, and in exchange 
-for using the information contained in this website "the reader agrees to hold the website's author and its affiliates 
+for using the information contained in this website """the reader agrees to hold the website's author and its affiliates 
 harmless against any claims for direct, or indirect, damages for decisions made by the reader based fully or 
-partially on such information."
+partially on such information."""
 ```
