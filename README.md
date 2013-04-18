@@ -15,10 +15,10 @@ If the reader changes residence, citizenship, nationality, or place of work, it 
 how his/her investment transactions are affected by such change and comply with all applicable laws and regulations as and when such becomes applicable. The reader understands that this website and its authors do not provide legal 
 and/or tax advise and are not responsible for advising him/her on the laws pertaining to his/her transaction.
 
-```
+```python
 We expressly disclaims all liability for the use or interpretation by others of information contained in this website. 
 Decisions based on information contained herein are the sole responsibility of the reader, and in exchange 
-for using the information contained in this website the reader agrees to hold the website's author and its affiliates 
+for using the information contained in this website "the reader agrees to hold the website's author and its affiliates 
 harmless against any claims for direct, or indirect, damages for decisions made by the reader based fully or 
-partially on such information.
+partially on such information."
 ```
