@@ -1,8 +1,7 @@
 Investment
 ==========
 
-.. contents: Table Of Contents
-.. section-numbering::
+
 
 ## INVESTMENT DISCLAIMER
 This website is provided for general information only, and nothing contained in the material constitutes a recommendation for the purchase or sale of any investment vehicle, nor applying any specific wealth management strategy.
@@ -26,5 +25,8 @@ partially on such information.*
 ## LICENSE
 
 ## CODE LAYOUT
+
+### DIRECTORY: SINGLE PURPOSE TESTING
+Contains **SINGLE PURPOSE STANDALONE** R-scripts implementations of specific investment strategies
 
 ## USAGE
