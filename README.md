@@ -1,8 +1,10 @@
 Investment
 ==========
 
+.. contents: Table Of Contents
+.. section-numbering::
 
-##INVESTMENT DISCLAIMER
+## INVESTMENT DISCLAIMER
 This website is provided for general information only, and nothing contained in the material constitutes a recommendation for the purchase or sale of any investment vehicle, nor applying any specific wealth management strategy.
 Do consult a financial professional before using any information offered on this website. 
 Although the statements of fact in potential reports are obtained from sources that may be consider reliable, we do not guarantee their accuracy and any such information may be incomplete or condensed. 
@@ -20,3 +22,9 @@ Decisions based on information contained herein are the sole responsibility of t
 for using the information contained in this website *the reader agrees to hold the website's author and its affiliates 
 harmless against any claims for direct, or indirect, damages for decisions made by the reader based fully or 
 partially on such information.*
+
+## LICENSE
+
+## CODE LAYOUT
+
+## USAGE
