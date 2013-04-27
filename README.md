@@ -26,7 +26,7 @@ partially on such information.*
 
 ## CODE LAYOUT
 
-### DIRECTORY: SINGLE PURPOSE TESTING
+### -> STANDALONE TESTING
 Contains **SINGLE PURPOSE STANDALONE** R-scripts implementations of specific investment strategies
 
 ## USAGE
