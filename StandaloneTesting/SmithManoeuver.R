@@ -25,57 +25,43 @@
 # invested via the PAC and the remaining $4 would go back to the financial institution to cover the interest. This is 
 # Guerrilla Capitalization as further described on p.77 of the book, "The Smith Manoeuvre".
 
+source("amortize.R"); source("HomeLoanStructure.R")
+
 loan <- 476000
 apr <- 1.9
 months <- 5*12
 pmt <- payment(loan, apr, months)
-pmt
 amrt2 <- amortize(loan, pmt, apr, months)
-
-amrt2$principal
-
-#Month 1
-amrt2$principal[1]
-
-#Month 2
-HELOCInvestInterest <- amrt2$principal[2]- amrt2$principal[1]
-AdditionalPrincipal <- HELOCInvestInterest - amrt2$principal[1] # p2 - 2 * p1
-# Determining the interest to be paid on the prinripal borrowed for investment
-LoanStructure$HomeEquityLineOfCredit$AnnuelRate*31/365*amrt2$principal[1]
-
-#Month 3
-HELOCInvestInterest <- HELOCInvestInterest + amrt2$principal[3]-3*amrt2$principal[1]
-# Determining the interest to be paid on the prinripal borrowed for investment
-LoanStructure$HomeEquityLineOfCredit$AnnuelRate*31/265*(2*amrt2$principal[1])
 
 # #
 # #
 # #
 
 # portion of the Re-advanceabled mortgage into a Line Of Credit
+ReAdvLOC <- NULL
 ReAdvLOC[1] <- amrt2$principal[1]
 for (i in 2:length(amrt2$principal)) {ReAdvLOC[i] <- amrt2$principal[i] - amrt2$principal[i-1]}
 
 #investment chequing account
-ICA
 DailyInterest <- LoanStructure$HomeEquityLineOfCredit$AnnuelRate / 365
-Days[1] <- 30;
+
+# Days[1] <- 30;
 # M1 * I1 < P2 - M1
 # M1 < P2 / (1 + I1)
-MaxICAWithdraw[1]   <- ReAdvLOC[2] / (1+DailyInterest*Days[1])
+# MaxICAWithdraw[1]   <- ReAdvLOC[2] / (1+DailyInterest*Days[1])
 
-Days[2] <- 28; 
+# Days[2] <- 28; 
 # M1*(I1+I2) + M2*I2 < P3 - M2
 # M1*(I1+I2) + M2*(1+I2) < P3
 # M2 < [P3 - M1*(I2+I2)] / (1+I2)
-MaxICAWithdraw[2] <- (ReAdvLOC[3] - MaxICAWithdraw[1]*(Days[1]+Days[2])*DailyInterest) / (1+Days[2]*DailyInterest)
+# MaxICAWithdraw[2] <- (ReAdvLOC[3] - MaxICAWithdraw[1]*(Days[1]+Days[2])*DailyInterest) / (1+Days[2]*DailyInterest)
 
-Days[3] <- 30
+# Days[3] <- 30
 # M1*(I1+I2+I3) + M2*(I2+I3) + (M3)*I3 < P4 - M3
 # M1*(I1+I2+I3) + M2(I2+I3) + M3(1+I3) < P4
 # M3 < [P4 - M1*(I1+I2+I3) - M2(I2+I3)] / (1+I3)
-MaxICAWithdraw[3] <- (ReAdvLOC[4] - MaxICAWithdraw[1]*((Days[1]+Days[2]+Days[3])*DailyInterest) - MaxICAWithdraw[2]*((Days[2]+Days[3])*DailyInterest)) / (1+Days[3]*DailyInterest)
-
+# MaxICAWithdraw[3] <- (ReAdvLOC[4] - MaxICAWithdraw[1]*((Days[1]+Days[2]+Days[3])*DailyInterest) - MaxICAWithdraw[2]*((Days[2]+Days[3])*DailyInterest)) / (1+Days[3]*DailyInterest)
+Days <- NULL
 Days[1:months] <- 30;
 Total <- 0; MaxICA <- NULL;
 MaxICA [1] <- (ReAdvLOC[1] - Total) / (1+Days[i]*DailyInterest)
@@ -87,10 +73,19 @@ for (i in 2:months)
   MaxICA [i] <- (ReAdvLOC[i] - Total) / (1+Days[i]*DailyInterest)
 }
 
-cat(" Without reinvesting Smith Maneuver's dividend gains:")
-cat(" The Smith Maneuver with Guerrilla Capitalization would allow investing a maximum of CAD", sum(MaxICA), " for a home mortgage of CAD", loan)
+#cat(" Without reinvesting Smith Maneuver's dividend gains:")
+#cat(" The Smith Maneuver with Guerrilla Capitalization would allow investing a maximum of CAD", sum(MaxICA), " for a home mortgage of CAD", loan)
 
-#
-PAC
+require(ggplot2)
+require(scales)
 
+Smith <- NULL
+Smith.Total <- cumsum(MaxICA)
+StartDate = as.Date(format(Sys.Date(), format="%Y-%m-%d"))
+Smith.Time <- seq(StartDate,  length=months ,by="1 month")
 
+Title <- as.character(format(round(sum(MaxICA)), big.mark=","))
+Title <- paste("$", Title, " Cash Injection Through Smith's Maneuver", sep="")
+p <- qplot(Smith.Time, Smith.Total, geom = "line", main = Title)
+fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
+p + scale_y_continuous(formatter=fmtExpLg10) + ylab("Smith Maneuver Cash Investment") + xlab("Time")
