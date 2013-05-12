@@ -43,7 +43,8 @@ for using the information contained in this website *the reader agrees to hold t
 fully or partially on such information.*
 
 ## LICENSE
-[ADAPTIVE PUBLIC LICENSE V1.0](http://opensource.org/licenses/alphabetical) as stated in [LICENSE.txt]() with its supplement file [SUPPFILE.txt]().
+[ADAPTIVE PUBLIC LICENSE V1.0](http://opensource.org/licenses/alphabetical) as stated in [LICENSE.txt](https://github.com/florentchandelier/WealthManagement/blob/master/License.txt) 
+with its supplement file [SUPPFILE.txt](https://github.com/florentchandelier/WealthManagement/blob/master/suppfile.txt).
 
 *Why APL V1.0?* Beside the fact that the initial contributor may make personal choices affecting part of the license terms, **section *3.6* grants independent modules with separate license agreements**. 
 Optimistically speaking, this may provide an excellent dynamic for public/private contributions, providing that modularity has been accounted for appropriately (refer to *section 1.7* of APL V1.0) during code design and development.
