@@ -25,11 +25,16 @@
 # invested via the PAC and the remaining $4 would go back to the financial institution to cover the interest. This is 
 # Guerrilla Capitalization as further described on p.77 of the book, "The Smith Manoeuvre".
 
-source("amortize.R"); source("HomeLoanStructure.R")
+sourceDir <- function (path, pattern = "\\.[rR]$", env = NULL, chdir = TRUE) 
+{
+  files <- sort(dir(path, pattern, full.names = TRUE))
+  lapply(files, source, chdir = chdir)
+}
+sourceDir("FictionalFinancialSituation/")
 
-loan <- 476000
-apr <- 1.9
-months <- 5*12
+loan <- LoanStructure$Loan$Value
+apr <- LoanStructure$Loan$AnnualRate
+months <- 10*12
 pmt <- payment(loan, apr, months)
 amrt2 <- amortize(loan, pmt, apr, months)
 
@@ -84,8 +89,8 @@ Smith.Total <- cumsum(MaxICA)
 StartDate = as.Date(format(Sys.Date(), format="%Y-%m-%d"))
 Smith.Time <- seq(StartDate,  length=months ,by="1 month")
 
-Title <- as.character(format(round(sum(MaxICA)), big.mark=","))
-Title <- paste("$", Title, " Cash Injection Through Smith's Maneuver", sep="")
+Title <- as.character(format(round(sum(MaxICA)), big.mark=",",scientific=F))
+Title <- paste("$", Title, " Cash Injection Through Guerilla-Smith's Maneuver from a $", format(loan,big.mark=",",scientific=F), " mortage", sep="")
 p <- qplot(Smith.Time, Smith.Total, geom = "line", main = Title)
 fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
-p + scale_y_continuous(formatter=fmtExpLg10) + ylab("Smith Maneuver Cash Investment") + xlab("Time")
+p + scale_y_continuous(formatter=fmtExpLg10) + ylab("Smith Maneuver Cash Investment") + xlab("Calendar Years")
