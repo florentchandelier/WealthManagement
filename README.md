@@ -1,6 +1,6 @@
 # OBJECTIVES
 
-The objective behind this repo is to investigate some personal wealth management strategies, from a theoretical perspective considering *I'm no **F**inancial **P**rofessional **A**dviser (**FPA**)*. **The initial objective** is to empower 
+The objective behind this repo is to investigate some personal wealth management strategies, from a theoretical perspective considering *I m no **F**inancial **P**rofessional **A**dviser (**FPA**)*. **The initial objective** is to empower 
 willing individuals with current strategies applicable to most *citizens*, that is not *only* for the  wealthy already benefiting from [private wealth management advises](http://en.wikipedia.org/wiki/Wealth_management). 
 **The main objective** is to *integrate* the knowledge gained from our initial objective into a *custom wealth management plan optimizing an individual desired financial goal(s)*. During that integration process, each strategy 
 will be considered as a module with interaction on a main cash flow, so as to allow integration of new strategies in the future, but also to account for differences in strategies applicable to different nations' tax laws (hopefully, 
@@ -15,7 +15,7 @@ Consequently, given hypothetical investment vehicles returns, the objective is t
 retirement income.
  
 ###### MOTIVATION(s)
-I've *rarely* met with FPAs providing an integrated overview of possible ***usual** custom personal financial planning* given a clear picture of current and projected assets along with desired future financial objective(s).
+I've *rarely* met with FPAs providing an integrated overview of possible * **usual** custom personal financial planning* given a clear picture of current and projected assets along with desired future financial objective(s).
 Rather, I've seen spreading (interesting but...) domain specific advises fitting FPAs comfort zones (... and fees criteria). 
 *Do ask for a projection of your wealth at age 75, maximizing the retirement income between age 60-75, that optimizes (rather than maximizes) registered/nonregistered contributions along with optimal house mortgage structure, 
 and accounting for changes in (1) tax brackets, (2) varying investments performances negative/positive on a yearly basis, (3) family income/tax management ... summarized in a nice graph/table for you to track on a yearly basis !!*
