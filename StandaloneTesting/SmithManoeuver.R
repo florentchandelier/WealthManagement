@@ -1,91 +1,173 @@
-# Example from http://www.firstfoundation.ca/financial/smith-manoeuvre-faq/
-# Taken from here: http://www.canadianmortgagetrends.com/canadian_mortgage_trends/2007/09/what-is-interes.html
-
-# Let's say that the first month you implement the Smith Manoeuvre and your mortgage payment is $1,400, 
-# of which, $1,150 goes to the bank for interest and $250 goes to reduce the principal on your mortgage. 
-# You borrow back that $250 from the LOC and invest it (this will yield tax deductions because the interest 
-# on the investment loan is tax deductible)...
-
-# The next month you make that same $1,400 mortgage payment but more goes toward principal reduction, 
-# say $252. On your credit line, the lender says you can now take out that $252. However, you have about 
-# $2 of interest to pay on that first $250 you borrowed to invest last month from the LOC. Since your credit 
-# union allows you to capitalize interest (http://www.canadianmortgagetrends.com/canadian_mortgage_trends/2007/09/what-is-interes.html)
-# , you do so (the $2 is added onto your LOC). Therefore you really only 
-# have $250 remaining to draw and invest. Next month same thing. Your mortgage principal is reduced $254, say, 
-# but you now owe $4 in interest on the LOC. Capitalize that interest and pull only $250 to invest. This continues 
-# all the way until the mortgage debt has been fully converted. You still invest the full $250 every month and 
-# there was no new cash required from you because the amount you are required to pay in interest on the LOC is 
-# covered by the fact that the amount of principal reduction on your mortgage is increasing which comes across to 
-# the line of credit to keep things in balance.
-
-# Banks will NOT allow you to capitalize the interest, so in month 2 pull the full $252 from the credit line, 
-# transfer it to a separate investment chequing account (ICA) and set up a PAC with your investment company to 
-# draw $250 to invest each month, and use the remainder to pay back to the financial institution to pay the interest 
-# expense as it comes due each month. For example, month 3 you would pull the full $254 to your ICA, $250 will be 
-# invested via the PAC and the remaining $4 would go back to the financial institution to cover the interest. This is 
-# Guerrilla Capitalization as further described on p.77 of the book, "The Smith Manoeuvre".
-
-source("amortize.R"); source("HomeLoanStructure.R")
-
-loan <- 476000
-apr <- 1.9
-months <- 5*12
-pmt <- payment(loan, apr, months)
-amrt2 <- amortize(loan, pmt, apr, months)
-
-# #
-# #
-# #
-
-# portion of the Re-advanceabled mortgage into a Line Of Credit
-ReAdvLOC <- NULL
-ReAdvLOC[1] <- amrt2$principal[1]
-for (i in 2:length(amrt2$principal)) {ReAdvLOC[i] <- amrt2$principal[i] - amrt2$principal[i-1]}
-
-#investment chequing account
-DailyInterest <- LoanStructure$HomeEquityLineOfCredit$AnnuelRate / 365
-
-# Days[1] <- 30;
-# M1 * I1 < P2 - M1
-# M1 < P2 / (1 + I1)
-# MaxICAWithdraw[1]   <- ReAdvLOC[2] / (1+DailyInterest*Days[1])
-
-# Days[2] <- 28; 
-# M1*(I1+I2) + M2*I2 < P3 - M2
-# M1*(I1+I2) + M2*(1+I2) < P3
-# M2 < [P3 - M1*(I2+I2)] / (1+I2)
-# MaxICAWithdraw[2] <- (ReAdvLOC[3] - MaxICAWithdraw[1]*(Days[1]+Days[2])*DailyInterest) / (1+Days[2]*DailyInterest)
-
-# Days[3] <- 30
-# M1*(I1+I2+I3) + M2*(I2+I3) + (M3)*I3 < P4 - M3
-# M1*(I1+I2+I3) + M2(I2+I3) + M3(1+I3) < P4
-# M3 < [P4 - M1*(I1+I2+I3) - M2(I2+I3)] / (1+I3)
-# MaxICAWithdraw[3] <- (ReAdvLOC[4] - MaxICAWithdraw[1]*((Days[1]+Days[2]+Days[3])*DailyInterest) - MaxICAWithdraw[2]*((Days[2]+Days[3])*DailyInterest)) / (1+Days[3]*DailyInterest)
-Days <- NULL
-Days[1:months] <- 30;
-Total <- 0; MaxICA <- NULL;
-MaxICA [1] <- (ReAdvLOC[1] - Total) / (1+Days[i]*DailyInterest)
-
-for (i in 2:months)
+sourceDir <- function (path, pattern = "\\.[rR]$", env = NULL, chdir = TRUE) 
 {
-  j = i-1;
-  Total <- Total + (MaxICA[j] * sum(Days[j:i]) * DailyInterest); 
-  MaxICA [i] <- (ReAdvLOC[i] - Total) / (1+Days[i]*DailyInterest)
+  files <- sort(dir(path, pattern, full.names = TRUE))
+  lapply(files, source, chdir = chdir)
+}
+sourceDir("StandaloneTesting/FictionalFinancialSituation/")
+source("StandaloneTesting/amortize.R")
+
+SmithManoeuvreGuerillaInit <- function (InitialDate)
+{
+  # P2S portion of the Principal (P) transfered to (2) the Smith (S) portfolio, accounting for Guerrilla interest capitalization
+  # P2G portion of the Principal (p) used for Guerrilla (G) interest capitalization
+  structure <- list(Schedule=InitialDate, P2S=0, P2G=0, PeriodicInterest=0,
+                    InterestTaxRefund=0, PortfYrlyDiv = 0)
+  return(structure)
 }
 
-#cat(" Without reinvesting Smith Maneuver's dividend gains:")
-#cat(" The Smith Maneuver with Guerrilla Capitalization would allow investing a maximum of CAD", sum(MaxICA), " for a home mortgage of CAD", loan)
+SmithGuerrilla <- function (MortgageStructure, RollingCum=0, RollingInterest=0,
+                           PercentConversion = 100/100, 
+                           ReAdv_DailyInterest=LoanStructure$HomeEquityLineOfCredit$AnnuelRate / 365)
+{
+  # MortgageStructure: original mortgage, can be complete schedule, or yearly
+  # PercentConversion: 100% converts each $$ available from principal-guerrilla to SmithPortfolio
+  # LoC_DailyInterest: daily pro-rated interest of the Readvanceable mortgage (a line of credit)
+  # CurrentLoC: amount of principal already converted in the Portfolio (for interest calculation)
+  # InitialDate is the date of the first principal payment used for interest Calculation (starts a month after)
+  
+  
+  # Mthly Maximum Portion of the Principal Transferable through Smith with Guerrilla Capitalization
+  #   - accountung for stock purchase fees
+  
+  # Tax Return from the Smith Structure Applied to Mortgage Principal on December
+  
+  # Yrly Div from the Smith Portfolio Applied to Mortgage Principal
+  
+  ReAdvLOC <- MortgageStructure$Principal
+  Schedule <- MortgageStructure$Schedule
+  SmithOnGoing <- ifelse(RollingCum==0, FALSE, TRUE) 
+  
+  # The Smith Manoeuvre with Guerrilla capitalization tells that, from the principal, we can allocate as much as
+  # the current principal minus the due interests, which is the pro-rated interest cost of 
+  # cumulative sum of total allocation until now.
+  #
+  # We assume the SM is performed at the mortgage payment date, thus full interest is due for previous manoeuvres
+  #                                  i
+  #  EQ(1)    P2S[i] = P2S[i] t[i] * SUM P2S[m] } , P2S = Principal to Smith Portfolio, t[i] = daily-prorated interest for period P2S[i] (interest for the month[i])
+  #                                  m=1
+  
+  
+  # number of days for the period, and day-prorated interest for the month
+  Days <- NULL; MthInt <- NULL
+  require(lubridate)
+  
+  if (!SmithOnGoing)
+  {
+    # Although this is counter-intuitive, this allows for this function to work for both the yrly smith, 
+    # and the all-at-once smith that provides the complete mortgage repayment at once (not on yrly basis)
+    # Specifically, all-at-once starts from 0 for principal (first month nothing happen as account is open), 
+    # whereas on the yrly calculation, we append yrly results to the initial stage (account opening), thus the 
+    # first index is not zero but first principal.
+    # Look at the Test_Smith_1() for illustration, where a rolling error occur if you set index to 1 statically.
+    index = which(ReAdvLOC>0)[1]
+    MthInt[1:index] = 0;Days[1:index] = 0;
+    
+    # starts from index+1 as there is no interest on the first month of borrowing.
+    # if done yrly this is 2, and if done all at once this is 3.
+    for (i in (index+1):length(Schedule) )
+    { 
+      # will be working from i+1 as no interest on first month of the overall process
+      d1 <- Schedule[i]; d2 <- d1; month(d2)=month(d2)-1;
+      Days[i] <- as.numeric(difftime(d1, d2, units="days"))}
+    MthInt <- ReAdv_DailyInterest * Days
+  } else {
+    
+    # starts from 1 as there are already a rolling borrowed amount on-going
+    for (i in 1:length(Schedule) )
+    { 
+      # will be working from i as there IS interest on first month (due to previous yearly manoeuvre)
+      d1 <- Schedule[i]; d2 <- d1; month(d2)=month(d2)-1;
+      Days[i] <- as.numeric(difftime(d1, d2, units="days"))}
+    MthInt <- ReAdv_DailyInterest * Days
+  }
+  
+  P2S <- NULL; P2G <- NULL; MthlyInterest <- NULL
+  P2S <- rep(0,length(MthInt))
+  P2G <- rep(0,length(MthInt))
+  MthlyInterest <- rep(0,length(MthInt))
+  
+  # REMEMBER THAT max(cumsum(ReAdvLOC))*max(MthInt) IS THE MONTHLY COST OF BORROWING ENTIRELY THE PRINCIPAL
+  
+  if (!SmithOnGoing)
+  {
+    StartIndex = which(ReAdvLOC>0)[1] # usually, first month is 0, then second is initial payment ... but too make sure
+    P2S[StartIndex] <- ReAdvLOC[StartIndex+1]/(1+MthInt[StartIndex]); # Full amount available from Readvanceable mortgage for Smith Manoeuvre    
+    P2S[StartIndex] <- PercentConversion * P2S[StartIndex]; # Manoeuvred principal toward smith as decided by user
+    
+    # Starts from StartIndex+1 till the end. No interest on first conversion month indeed !
+    # REFER to EQ(1)
+    for (i in (StartIndex+1):length(MthInt))
+    {
+      P2G[i] = max(cumsum(P2S[1:(i-1)])) * MthInt[i-1];
+      P2S[i] <- ReAdvLOC[i] - P2G[i]
+    }
+    
+  } else {
+    
+    # Starts from i=1 as the are running interest for the first month, and till the end.
+    # REFER to EQ(1)
+    P2G[1] <- RollingCum * RollingInterest;
+    P2S[1] <- ReAdvLOC[1] - P2G[1]
+    
+    for (i in 2:length(MthInt))
+    {
+      P2G[i] <- (RollingCum + max(cumsum(P2S[1:(i-1)]))) * MthInt[i-1];
+      P2S[i] <- ReAdvLOC[i] - P2G[i]
+    }
+  }
+  
+  Refund = 0; PortfYrlyDiv = 0;
+  
+  SMG = list(Schedule=Schedule, P2S=P2S, P2G=P2G, PeriodicInterest=MthInt,  
+             InterestTaxRefund=Refund, PortfYrlyDiv = PortfYrlyDiv)
+  
+  return (SMG)
+}
 
-require(ggplot2)
-require(scales)
+MortgageConversion <- function (Smith=TRUE)
+{
+  
+}
 
-Smith <- NULL
-Smith.Total <- cumsum(MaxICA)
-StartDate = as.Date(format(Sys.Date(), format="%Y-%m-%d"))
-Smith.Time <- seq(StartDate,  length=months ,by="1 month")
+PostSmithGuerilla_InterestConversion <- function ()
+{
+  
+}
 
-Title <- as.character(format(round(sum(MaxICA)), big.mark=","))
-Title <- paste("$", Title, " Cash Injection Through Smith's Maneuver", sep="")
-p <- qplot(Smith.Time, Smith.Total, geom = "line", main = Title)
-fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
-p + scale_y_continuous(formatter=fmtExpLg10) + ylab("Smith Maneuver Cash Investment") + xlab("Time")
+SmithManoeuvre <- function ()
+{
+  TotalLoan = 476000;# Mortgage Balance
+  NAiR=2.5/100; yrs=25; CompPeriod=2; NbYrlyPayment=12; 
+  DateLoanOpen = as.Date(format(Sys.Date(), format="%Y-%m-%d"))
+  
+  Mtg = MortgageStructureInit(DateLoanOpen, TotalLoan);
+
+  while ( Mtg$Balance[length(Mtg$Balance)] > 0){
+    MtgTemp <- YrlyMortgageSturcture(NAiR, yrs, CompPeriod, NbYrlyPayment, TotalLoan,
+                                     Mtg$Balance[length(Mtg$Balance)], 
+                                     Mtg$Schedule[length(Mtg$Schedule)]);
+    Mtg <- mapply(c, Mtg, MtgTemp, SIMPLIFY=FALSE)  }
+  PlotMortgage(Mtg)
+
+#######################################################################
+# Mortgage combined with Smith Manoeuvre a la Guerrilla Capitalization
+#######################################################################
+  
+  MtgSmith = MortgageStructureInit(DateLoanOpen, TotalLoan);
+  SmithG = SmithManoeuvreGuerillaInit(DateLoanOpen);
+  
+  while ( MtgSmith$Balance[length(MtgSmith$Balance)] > 0){
+    MtgTemp <- YrlyMortgageSturcture(NAiR, yrs, CompPeriod, NbYrlyPayment, TotalLoan,
+                                     MtgSmith$Balance[length(MtgSmith$Balance)], 
+                                     MtgSmith$Schedule[length(MtgSmith$Schedule)]);
+    
+    # We use max(cumsum) as cumsum returns a list for cumsum, the rolling value being the last one.
+    SMGTemp <- SmithGuerrilla (MtgTemp, max(cumsum(SmithG$P2S)), 
+                               SmithG$PeriodicInterest[length(SmithG$PeriodicInterest)])
+    
+    MtgSmith <- mapply(c, MtgSmith, MtgTemp, SIMPLIFY=FALSE)
+    SmithG <- mapply(c, SmithG, SMGTemp, SIMPLIFY=FALSE)  
+  }
+  PlotMortgage(MtgSmith)
+
+}
