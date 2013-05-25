@@ -10,6 +10,9 @@ By means of examples, **and living in Canada**, the *initial investigation* will
 minimum mortgage payments *VS* anticipated contribution(s) and registered *VS* [nonregistered](http://www.investorwords.com/18431/non_registered_account.html) contributions in light of 
 retirement objective(s) and tax-brackets evolution through one's professional life. A potential following *main objective* would be to incorporate all of the previous into an optimization scheme converging toward retirement 
 objective(s).
+
+Consequently, given hypothetical investment vehicles returns, the objective is to optimize the flow of cash to such vehicles through various strategies, and for a given financial objective (by default, maximizing  
+retirement income.
  
 ###### MOTIVATION(s)
 I've *rarely* met with FPAs providing an integrated overview of possible ***usual** custom personal financial planning* given a clear picture of current and projected assets along with desired future financial objective(s).
@@ -18,9 +21,9 @@ Rather, I've seen spreading (interesting but...) domain specific advises fitting
 and accounting for changes in (1) tax brackets, (2) varying investments performances negative/positive on a yearly basis, (3) family income/tax management ... summarized in a nice graph/table for you to track on a yearly basis !!*
 
 Beyond that statement, as I'm surprised no university research group came up with such framework through some *tax-payed research grant*, I've decided to address the matter and work on it.
-(truth is, such research sponsored grants do exist but end up being involved in *technology transfer* into some corporation that, in the end, will not directly benefit the general public in form of educating its fellow citizen).
+(truth is, such research sponsored grants do exist but end up being involved in *technology transfers* that, in the end, will not directly benefit the general public in form of educating its fellow citizen).
 
-... And finally, although I've found interesting information throughout different blogs, beside few random or out of context examples, I've never came across actual implementation of strategies ... *and I believe the math !* 
+... And finally, although I've found interesting information throughout different blogs/books, beside few random or out of context examples, I've never came across actual implementation of strategies ... *and I believe the math !* 
 is the real ground on which one may assess the risk-dependency of different financial plans, **in light of FPAs' experiences** in advising different individuals and families while assessing their real ability to 
 understand the nature of risk and its impact on life-quality.
 
@@ -54,7 +57,10 @@ Optimistically speaking, this may provide an excellent dynamic for public/privat
 I will use primarily [R](www.r-project.org) for implementation as I believe this is a straight-forward yet extremely powerful framework in forms of scripting language for statistics. Along with the code, there should be different **.Rproj**
  files corresponding to **project workspaces** for the excellent [R-Studio IDE](www.rstudio.com).
 
-### DIR // StandaloneTesting
+Furthermore, **to preserve the confidentiality of personal financial information**, a *fictional financial situation* will be used from sourcing files in the [*FictionalFinancialSituation* directory](), containing fictional Income sources, 
+house value, mortgage rates and so on. As such, by duplicating such directory into a private one, one may be able to protect his/her financial information while benefiting from, and contributing to the project.
+ 
+### DIR ~ StandaloneTesting
 Contains R-scripts for **SINGLE PURPOSE INVESTIGATIONS** of specific investment strategies. The objective is to get a feel for different strategies prior further work.
 The code itself is meant to be self-explanatory rather than optimized, with web references for definition/explanation/formulae
 
