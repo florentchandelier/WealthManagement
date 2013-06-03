@@ -11,8 +11,7 @@ minimum mortgage payments *VS* anticipated contribution(s) and registered *VS* [
 retirement objective(s) and tax-brackets evolution through one's professional life. A potential following *main objective* would be to incorporate all of the previous into an optimization scheme converging toward retirement 
 objective(s).
 
-Consequently, given hypothetical investment vehicles returns, the objective is to optimize the flow of cash to such vehicles through various strategies, and for a given financial objective (by default, maximizing  
-retirement income.
+Consequently, given hypothetical investment vehicles returns, the objective is to optimize the flow of cash to such vehicles through various strategies, and for a given financial objective (by default, maximizing retirement income).
  
 ###### MOTIVATION(s)
 I've *rarely* met with FPAs providing an integrated overview of possible **usual** *custom personal financial planning* given a clear picture of current and projected assets along with desired future financial objective(s).
