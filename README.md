@@ -56,7 +56,8 @@ Optimistically speaking, this may provide an excellent dynamic for public/privat
 I will use primarily [R](www.r-project.org) for implementation as I believe this is a straight-forward yet extremely powerful framework in forms of scripting language for statistics. Along with the code, there should be different **.Rproj**
  files corresponding to **project workspaces** for the excellent [R-Studio IDE](www.rstudio.com).
 
-Furthermore, **to preserve the confidentiality of personal financial information**, a *fictional financial situation* will be used from sourcing files in the [*FictionalFinancialSituation* directory](), containing fictional Income sources, 
+Furthermore, **to preserve the confidentiality of personal financial information**, a *fictional financial situation* will be used from sourcing files in the [*FictionalFinancialSituation* directory](https://github.com/florentchandelier/WealthManagement/tree/master/StandaloneTesting/FictionalFinancialSituation), 
+containing fictional Income sources, 
 house value, mortgage rates and so on. As such, by duplicating such directory into a private one, one may be able to protect his/her financial information while benefiting from, and contributing to the project.
  
 ### DIR ~ StandaloneTesting
