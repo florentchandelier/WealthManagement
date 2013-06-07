@@ -66,9 +66,10 @@ The code itself is meant to be self-explanatory rather than optimized, with web 
 
 > REFER TO [Notes_StandaloneTesting](https://github.com/florentchandelier/WealthManagement/blob/master/StandaloneTesting/Notes_StandaloneTesting.md) FOR DETAILS.
 
-### DIR ~ StandaloneTesting
+### DIR ~ Testing
 Contains R-scripts tests for the validation of created function(s) in forms of *(a)* equivalence with expected pre-calculated outcome and *(b)* equivalence with straight forward and anticipated outcome.
 > REFER TO COMMENTS WITHIN SOURCES FOR DETAILS
 
 ## USAGE
+Nothing is implemented yet in the general sense as StandAlone Testing of different Strategies is undergoing.
 
