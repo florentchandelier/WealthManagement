@@ -2,9 +2,10 @@
 home mortgage**, how many $$ from the principal mortgage could be funneled in a **deductible investment portfolio** benefiting from a re-advanceable mortgage structure (the Smith part), leveraging part of the principal component 
 to support the portfolio interests (the Guerilla part) without re-injection of new cash flow **until the manoeuver is complete**.
 
-> LIMITATION(s): (1) 100% of what can be funneled without reinjecting cash is performed (see PercentConversion=100/100 ; MIND IMPACT ON REFUND), 
-(2) Capital Appreciation is not inflation adjusted (thought should be given on this, not simply add inflation during compounding ... as time of contribution and f(time_inflation) are related)
+> LIMITATION(s): (1) 100% of what can be funneled without reinjecting cash is performed (see PercentConversion=100/100 ; MIND IMPACT ON REFUND), (2) little glitches here and there that 
+should be corrected (a) missing about a month contribution in the end, (b) Portfolio should start at 0 instead first month of contribution, (c) last month excess on ReAdv should be directly 
+used on HELO debt. (all of these glitches can be seen on below cashflow graph)
 
-> USAGE: source("SmithManoeuver.R"); SmithManoeuver() # providing the FictionalFinancialSituation is as desired for the run
+> USAGE: (1) LOAD WealthManagement.Rproj in RStudio. (2) In RStudio > source("SmithManoeuver.R"); SmithManoeuver() # providing the FictionalFinancialSituation is as desired for the run
 
 ![Output](https://github.com/florentchandelier/WealthManagement/blob/master/StandaloneTesting/Images/SmithManoeuver.png?raw=true)

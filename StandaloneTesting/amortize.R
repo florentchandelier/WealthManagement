@@ -1,6 +1,12 @@
+source("Tests/Test_Amortization.R")
+
 # http://www.acad.polyu.edu.hk/~machanck/lectnotes/c7_finan210.pdf
 # Pn = P0(1 + i)^n    ; Pn
 
+Compounding <- function (Amount, Rate, NbYears)
+{
+  return (Amount*(1+Rate)^NbYears)
+}
 
 MonthlyAmortization  <- function(loan, apr_IN_percent, months) {
     rate <- 1 + apr_IN_percent / 12
@@ -23,7 +29,7 @@ YrlyMortgageSturcture <- function (NAiR=7.5/100, yrs=5, CompPeriod=2, NbYrlyPaym
 {
   # http://www.vertex42.com/ExcelArticles/amortization-calculation.html
   # Calculating the Rate per Period
-  # r = rate per payment period, i = nominal annual interest rate
+  # NAIR = nominal annual interest rate
   # CompPeriod = number of compounding period per year, NbYrlyPayment = number of payment periods per year
   # nbp = number of payment of periods, i = nominal annual interest rate (NAiR)
   
@@ -57,24 +63,25 @@ YrlyMortgageSturcture <- function (NAiR=7.5/100, yrs=5, CompPeriod=2, NbYrlyPaym
   return(Mtgdata)
 }
 
-PlotMortgage <- function (Mtg)
-{
-  Mtgdata <- data.frame(
-    Schedule=rep(Mtg$Schedule,3), Mortgage=c(cumsum(Mtg$Interest), cumsum(Mtg$Principal), Mtg$Balance), 
-    MtgCluster=gl(3,length(Mtg$Schedule),labels=c("Mort.Interest", "Mort.Principal", "Mort.Balance"))
-  )
+DisplayMortgage <- function(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend, RenderPoint=NULL){ 
+  Plotdata <- data.frame(
+    Schedule=rep(XRef,NbComponents), Mortgage=RenderData, 
+    Legend=gl(NbComponents,length(XRef),labels=Label)  )
   
-  Title = paste("Mortgage Structure Conversion")
   
   require(ggplot2)
   require(scales)
-  p <- ggplot(aes(x=Schedule, fill=MtgCluster), data=Mtgdata) + geom_line(aes(y= Mortgage, color=MtgCluster))
+  p <- ggplot(aes(x=Schedule, fill=Legend), data=Plotdata) + geom_line(aes(y= Mortgage, color=Legend))
+  #p <- p + geom_point(aes(y= RenderPoint, color=LabelPoint))
+  
   
   require(plyr)
   fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
   p <- p + scale_y_continuous(label=fmtExpLg10)
-  p <- p + ggtitle(Title) + ylab("Cash Flow from Readvancable Mortgage Principal") + xlab("Calendar Years")
-  p
+  p <- p + ggtitle(Title) + ylab(YLegend) + xlab(XLegend)
+  print(p)
+  
+  return(p)
 }
 
 amortize <- function(loan, payment, apr_IN_percent, months) {
