@@ -37,7 +37,6 @@ Test_Smith_1 <- function ()
   SMG_atOnce = SmithManoeuvreGuerillaInit(DateLoanOpen);
   SMG_atOnce<- SmithGuerrilla (Mtg, max(cumsum(SMG_atOnce$P2S)),
                             SMG_atOnce$PeriodicInterest[length(SMG_atOnce$PeriodicInterest)])
-  
   #
   #  (2)
   #  

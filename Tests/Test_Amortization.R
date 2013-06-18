@@ -3,14 +3,6 @@
 # For example, for a home loan for $200,000 with a fixed yearly interest rate 
 # of 6.5% for 30 years : Mthly Mortgage Payment = 1264.14
 source("amortize.R")
-if (round(MonthlyAmortization (200000, 6.5/100, 30*12)) != 1264)
-  {paste("Amortize.R->MonthlyAmortization Test FAILED")}else 
-  {paste("Amortize.R->MonthlyAmortization Test SUCCEED")}
-
-if (length(which(amortize(200000, MonthlyAmortization (200000, 6.5/100, 30*12),6.5/100, 40*12)$balance>0))+1 != 30*12))
-  {paste("Amortize.R -> AMORTIZE SUMMARY Test FAILED")}else 
-  {paste("Amortize.R -> AMORTIZE SUMMARY Test SUCCEED")}
-
 
 Amortize_Test1 <- function ()
 {
@@ -37,8 +29,32 @@ Amortize_Test1 <- function ()
     Mtg_yrly <- mapply(c, Mtg_yrly, MtgTemp, SIMPLIFY=FALSE)  }
   
   if (length(Mtg_atOnce$principal) == length(Mtg_yrly$Principal[2:length(Mtg_yrly$Principal)]))
-  {paste("Amotization Length test PASSED")} else {paste("Amotization Length test FAILED")}
+  {paste("Amotization Length test 1 PASSED")} else {paste("Amotization Length test 1 FAILED")}
   
   if (max(cumsum(Mtg_atOnce$principal-cumsum(Mtg_yrly$Principal[2:length(Mtg_yrly$Principal)]))) < 5)
-  {paste("Amotization Length test PASSED")} else {paste("Amotization Length test FAILED")}
+  {paste("Amotization Length test 1 PASSED")} else {paste("Amotization Length test 1 FAILED")}
+}
+
+#
+# We test the compounding function by validating that the doubling time is equivalent to ln(2)/ln(1+rate)
+# as described here: http://en.wikipedia.org/wiki/Rule_of_72
+#
+Amortize_Test2 <- function ()
+{
+  amount = 100;
+  TimeRatio = 2;
+  r = 10/100;
+  if (Compounding(amount, r, log(TimeRatio)/log(1+r)) == amount*TimeRatio)
+  {paste("Amotization Compounding doubling time test 2 PASSED")} else {paste("Amotization Compounding doubling time test 2 FAILED")}
+}
+
+Amortize_Test3 <- function ()
+{
+  if (round(MonthlyAmortization (200000, 6.5/100, 30*12)) != 1264)
+    {paste("Amortize.R->MonthlyAmortization Test 3 FAILED")}else 
+    {paste("Amortize.R->MonthlyAmortization Test 3 SUCCEED")}
+  
+  if (length(which(amortize(200000, MonthlyAmortization (200000, 6.5/100, 30*12),6.5/100, 40*12)$balance>0))+1 != 30*12)
+    {paste("Amortize.R -> AMORTIZE SUMMARY Test 3 FAILED")}else 
+    {paste("Amortize.R -> AMORTIZE SUMMARY Test 3 SUCCEED")}
 }
