@@ -53,8 +53,8 @@ Optimistically speaking, this may provide an excellent dynamic for public/privat
 
 ## CODE LAYOUT and DIRECTORIES
 
-I will use primarily [R](www.r-project.org) for implementation as I believe this is a straight-forward yet extremely powerful framework in forms of scripting language for statistics. Along with the code, there should be different **.Rproj**
- files corresponding to **project workspaces** for the excellent [R-Studio IDE](www.rstudio.com).
+I will use primarily [R](http://www.r-project.org) for implementation as I believe this is a straight-forward yet extremely powerful framework in forms of scripting language for statistics. Along with the code, there should be different **.Rproj**
+ files corresponding to **project workspaces** for the excellent [R-Studio IDE](http://www.rstudio.com).
 
 Furthermore, **to preserve the confidentiality of personal financial information**, a *fictional financial situation* will be used from sourcing files in the [*FictionalFinancialSituation* directory](https://github.com/florentchandelier/WealthManagement/tree/master/StandaloneTesting/FictionalFinancialSituation), 
 containing fictional Income sources, 
