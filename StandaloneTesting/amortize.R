@@ -138,3 +138,39 @@ plot.amortization <- function(amrt) {
   text(floor(max(year)-1),round(max(amrt$interest)), format(round(amrt$interest[length(amrt$interest)]), scientific = FALSE), col="brown4", font=2)
   
 }
+
+CollateralForAnnuity <- function (Amount=8094897, yrlRate=5.5/100, NbYrs=25, Loan=TRUE)
+{
+  # http://finance.zacks.com/collateral-assignment-life-insurance-policy-5962.html
+  # OBJECTIVE(S)
+  #               - providing a collateral (ColAmount), determine a maximum yrly amount that can be borrowed until
+  #                 total consumption of such collateral for a given number of year(s), PAYING INTEREST ON INTEREST;
+  #               - Collateral is a LIQUID ASSET, preferred CASH, OR 
+  #                       ** considering a whole life policy, its Total Cash Value at age 99 (upon death) ; 
+  #                       To use a life insurance policy as collateral for a loan, you must have a 
+  #                       policy that accumulates a cash value [http://www.ehow.com/info_7822529_can-life-policy-collateral-loan.html]
+  #                       ** Whole life insurance cash value can supplement your resources whilst you are 
+  #                          alive by serving as collateral if you require a loan. [http://www.wholelifeinsurance.org.uk/whole-life-insurance-cash-value.html]
+  
+  
+  # r = 1 + yrlRate
+  # Collateral = AnnualLoan * (r^(NbYrs-1) + r^(NbYrs-2) ... + r^(NbYrs-(NbYrs-1)))
+  #            = Annuity * (1+r) + (Annuity+Interest_yr_1) * (1+r) + (Annuity+Interes_yr_1+2) * (1+r) ........ (compunding the interest on interest)
+  #                 , where Interest_yr_1 = Annuity * r ; Interest_yr_1+2 = (Interest_yr_1+Annuity) * r
+  #                                                                       = [(Annuity*r)+Annuity] * r
+  
+  if (Loan)
+  {
+    # Return the maximal annuity available through the provided the collateral
+    # Notice this accounts for INTEREST ON INTEREST
+    CollateralAssignment <- Amount
+    return( CollateralAssignment/(max(cumsum((1+yrlRate)^(1:NbYrs)))) )
+  } else
+  {
+    # Return the Collateral required for a desired annuity
+    # Notice this accounts for INTEREST ON INTEREST on the annuity
+    Annuity <- Amount
+    return( Annuity * (max(cumsum((1+yrlRate)^(1:NbYrs)))) )
+        
+  }
+}

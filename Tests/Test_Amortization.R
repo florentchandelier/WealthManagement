@@ -58,3 +58,37 @@ Amortize_Test3 <- function ()
     {paste("Amortize.R -> AMORTIZE SUMMARY Test 3 FAILED")}else 
     {paste("Amortize.R -> AMORTIZE SUMMARY Test 3 SUCCEED")}
 }
+
+Amortize_Test4 <- function ()
+{
+  Borrowed = 150000
+  TotalBwd = 0
+  yrlRate = 5.5/100
+  NbYrs = 25
+  
+  for (i in 1:NbYrs)
+  {    TotalBwd = TotalBwd + Borrowed*((1+yrlRate)^(NbYrs-i+1))  }
+  
+  if (CollateralForAnnuity() == TotalBwd) {paste("Amortize.R -> Test 4 FAILED on Collateral Assignment")}else 
+  {paste("Amortize.R -> Test 4 SUCCEED on Collateral Assignment")}
+}
+
+Amortize_Test5 <- function ()
+{
+  # Interest will be factored in, thus paying interest on interest (providing this is accepted by the lender
+  # and mostly based still on the amount of cash value used as collateral from the whole life insurance)
+  Annuity <- 150000
+  RequiredCollateral <- 0;
+  Interest <- 0;
+  
+  for (i in 1:NbYrs)
+  {
+    RequiredCollateral <- RequiredCollateral + (Annuity+Interest)*(1+yrlRate);
+    Interest <- Interest + (Annuity+Interest)*yrlRate;
+  }
+  
+  ExpectedCollateral <- CollateralForAnnuity(Annuity, yrlRate=5.5/100,NbYrs=25,Loan=FALSE);
+  
+  if (RequiredCollateral == ExpectedCollateral) {paste("Amortize.R -> Test 5 FAILED on Expected Collateral Annuity")}else 
+  {paste("Amortize.R -> Test 4 SUCCEED on Expected Collateral Annuity")}
+}
