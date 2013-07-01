@@ -12,3 +12,11 @@ the resulting HELOC Smith Portfolio (should be adjustable), (3) little glitches 
 > USAGE: (1) LOAD WealthManagement.Rproj in RStudio. (2) In RStudio > source("SmithManoeuver.R"); SmithManoeuver() # providing the FictionalFinancialSituation is as desired for the run
 
 ![Output](https://github.com/florentchandelier/WealthManagement/blob/master/StandaloneTesting/Images/SmithManoeuver.png?raw=true)
+
+
+* Next ... [amortise.R - CollateralForAnnuity() ](amortise.R) -- implementation of a Collateral Loan Program involving the use of the [Total Cash Surrender Value - TCSV](http://en.wikipedia.org/wiki/Cash_surrender_value) of a 
+Participating Whole Life Insurance as a Collateral for a loan (the **Annuity**). **When using TCSV as Collateral**, the insurer will generally keep the equivalent of the first year of interest as security, and the lender 
+(a bank) usually advances up to 90% of paid-up cash value, as of the most recent payment date. Thus, effectively, a policyowner will receive up to x%(TCSV - TCSV*FirstYrLoanInterest) in annuity.
+
+> MOTIVATION(s): Factoring Guaranteed and Non Guaranteed benefits against the Paid-up annual Premium, this strategy might be relevant if the premium one's paid over a period of time is at least comparable to the (tax-free) loan-annuity 
+one may get for the same amount of time as Premiums were paid for.
