@@ -1,8 +1,8 @@
 # OBJECTIVES
 
-The objective behind this repo is to investigate some personal wealth management strategies, from a theoretical perspective considering I'm no **F**inancial **P**rofessional **A**dviser ( **FPA** ). **The initial objective** is to empower 
-willing individuals with current strategies applicable to most *citizens*, that is not *only* for the  wealthy already benefiting from [private wealth management advises](http://en.wikipedia.org/wiki/Wealth_management). 
-**The main objective** is to *integrate* the knowledge gained from our initial objective into a *custom wealth management plan optimizing an individual desired financial goal(s)*. During that integration process, each strategy 
+The objective behind this repo is to investigate some personal wealth management strategies, from a *theoretical perspective* considering I'm no **F**inancial **P**rofessional **A**dviser ( **FPA** ). **The initial objective** is to empower 
+willing individuals with strategies available to *most citizens*, that do not benefit directly from [private wealth management advises](http://en.wikipedia.org/wiki/Wealth_management). 
+**The goal** is to *integrate* the knowledge gained from our initial objective into a *custom wealth management plan optimizing one's financial goal(s)*. During that integration process, each strategy 
 will be considered as a module with interaction on a main cash flow, so as to allow integration of new strategies in the future, but also to account for differences in strategies applicable to different nations' tax laws (hopefully, 
 enough thoughts will be given on that front so that efforts will not be for canadians only).
 
@@ -24,20 +24,22 @@ Beyond that statement, as I'm surprised no university research group came up wit
 
 ... And finally, although I've found interesting information throughout different blogs/books, beside few random or out of context examples, I've never came across actual implementation of strategies ... *and I believe the math !* 
 is the real ground on which one may assess the risk-dependency of different financial plans, **in light of FPAs' experiences** in advising different individuals and families while assessing their real ability to 
-understand the nature of risk and its impact on life-quality.
+understand the nature of risk and its impact on one's quality of life.
 
 # INVESTMENT DISCLAIMER
 This website is provided for general information only, and nothing contained in the material constitutes a recommendation for the purchase or sale of any investment vehicle, nor applying any specific wealth management strategy.
 Do consult a financial professional before using any information offered on this website. 
-Although the statements of fact in potential reports are obtained from sources that may be consider reliable, we do not guarantee their accuracy and any such information may be incomplete or condensed. 
-Also views expressed in this website are based on research materials available from sources that may be considered reliable. Views are subject to change on the basis of additional or new research, new facts or developments. 
+Although the statements of fact in potential reports are obtained from sources that may be considered reliable, we do not guarantee their accuracy and any such information may be incomplete or condensed. 
+Also views expressed in this website are punctual and based on research materials available from sources that may be considered reliable. Neverthelss, such views are subject to change on the basis of additional or new research, new facts or developments, 
+and revised opinion(s). 
 
 The investment risks described herein are not purported to be exhaustive. Any person considering an investment should seek independent advice on the suitability or otherwise of the particular investment. 
-*Investment products and strategies are subject to risk, including possible loss of principal amount invested and therefore you should not invest money that you cannot afford to lose.* Past performance is not indicative of future results: prices can go up or down.  
+*Investment products and strategies are subject to risk, including possible loss of principal amount invested and therefore you should not invest money that you cannot afford to lose.* Past performance is not indicative of 
+future results: prices can go up or down.  
+
 The reader understands that it is his/her responsibility to seek legal and/or tax advice regarding the legal and tax consequences of his/her investment transactions. 
 If the reader changes residence, citizenship, nationality, or place of work, it is his/her responsibility to understand 
 how his/her investment transactions are affected by such change and comply with all applicable laws and regulations as and when such becomes applicable. 
-
 The reader understands that this website and its author(s) do not provide legal and/or tax advise and are not responsible for advising him/her on the laws pertaining to his/her transaction.
 
 We expressly disclaims all liability for the use or interpretation by others of information contained in this website. Decisions based on information contained herein are the sole responsibility of the reader, and in exchange 
@@ -49,12 +51,13 @@ fully or partially on such information.*
 with its supplement file [SUPPFILE.txt](https://github.com/florentchandelier/WealthManagement/blob/master/suppfile.txt).
 
 *Why APL V1.0?* Beside the fact that the initial contributor may make personal choices affecting part of the license terms, **section *3.6* grants independent modules with separate license agreements**. 
+
 Optimistically speaking, this may provide an excellent dynamic for public/private contributions, providing that modularity has been accounted for appropriately (refer to *section 1.7* of APL V1.0) during code design and development.
 
 ## CODE LAYOUT and DIRECTORIES
 
 I will use primarily [R](http://www.r-project.org) for implementation as I believe this is a straight-forward yet extremely powerful framework in forms of scripting language for statistics. Along with the code, there should be different **.Rproj**
- files corresponding to **project workspaces** for the excellent [R-Studio IDE](http://www.rstudio.com).
+ files corresponding to **project workspaces** for the excellent [R-Studio IDE](http://www.rstudio.com). **Codes and Scripts validation and Verification was carried on under R-version:3.0.0 (2013.04.03) and RStudio-version:0.97.551.**
 
 Furthermore, **to preserve the confidentiality of personal financial information**, a *fictional financial situation* will be used from sourcing files in the [*FictionalFinancialSituation* directory](https://github.com/florentchandelier/WealthManagement/tree/master/StandaloneTesting/FictionalFinancialSituation), 
 containing fictional Income sources, 
@@ -71,5 +74,5 @@ Contains R-scripts tests for the validation of created function(s) in forms of *
 > REFER TO COMMENTS WITHIN SOURCES FOR DETAILS
 
 ## USAGE
-Nothing is implemented yet in the general sense as StandAlone Testing of different Strategies is undergoing.
+Nothing is implemented yet in the general sense as [Standalone Testing](https://github.com/florentchandelier/WealthManagement/blob/master/StandaloneTesting/Notes_StandaloneTesting.md) of different Strategies is undergoing.
 
