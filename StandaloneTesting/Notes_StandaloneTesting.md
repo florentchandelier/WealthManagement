@@ -9,7 +9,7 @@ the resulting HELOC Smith Portfolio (should be adjustable), (3) little glitches 
 (b) Portfolio should start at 0 instead first month of contribution, (c) last month excess on ReAdv should be directly used on HELO debt. 
 (all of these glitches can be seen on below cashflow graph)
 
-> USAGE: (1) LOAD WealthManagement.Rproj in RStudio. (2) In RStudio > source("SmithManoeuver.R"); SmithManoeuver() # providing the FictionalFinancialSituation is as desired for the run
+> USAGE: (1) LOAD WealthManagement.Rproj in RStudio. (2) In RStudio > source("SmithManoeuver.R"); SmithManoeuvre() # providing the FictionalFinancialSituation is as desired for the run
 
 ![Output](https://github.com/florentchandelier/WealthManagement/blob/master/StandaloneTesting/Images/SmithManoeuver.png?raw=true)
 
