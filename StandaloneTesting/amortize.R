@@ -3,9 +3,34 @@ source("Tests/Test_Amortization.R")
 # http://www.acad.polyu.edu.hk/~machanck/lectnotes/c7_finan210.pdf
 # Pn = P0(1 + i)^n    ; Pn
 
-Compounding <- function (Amount, Rate, NbYears)
+Compounding <- function (Amount, Rate, NbPeriods, Forward=TRUE)
 {
-  return (Amount*(1+Rate)^NbYears)
+  # output the Amount compounded over the given period at Rate
+  if (Forward) return (Amount*(1+Rate)^NbPeriods)
+  # output the constant Rate per period required to deliver the compounded_Amount=Rate*Amount over complete period
+  else return (exp(log(1+Rate)^1/NbPeriods)-1)
+}
+
+InvestmentPerfCompounded <- function (Amount, Rate, NbYearsContrib, NbYearsCompound) {
+# res = InvestmentPerfCompounded(15000, 15/100, 11, 65-34); formatC(res, format="d", big.mark=',')
+ 
+  CapTaxGain = 0.79 # http://en.wikipedia.org/wiki/Capital_gains_tax#Canada
+  Tot = Amount*(1+Rate)
+  for (i in 2:NbYearsCompound)
+  {
+    if ( i <= NbYearsContrib)
+    { Gain = (max(Tot) + Amount)*Rate * CapTaxGain
+      Tot = append(Tot, max(Tot)+ Amount+Gain) }
+    else
+    { Gain = max(Tot)*Rate * CapTaxGain
+      Tot = c(Tot, max(Tot) +Gain)}
+  }
+  return(Tot)
+
+#   R = 0
+#   for (i in 1:NbYearsContrib)
+#   { R = R + (1+Rate)^i }
+#   return(Compounding(Amount*R, Rate, NbYearsCompound-NbYearsContrib))
 }
 
 MonthlyAmortization  <- function(loan, apr_IN_percent, months) {
