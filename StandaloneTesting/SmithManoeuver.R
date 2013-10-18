@@ -49,7 +49,7 @@ SmithGuerrilla <- function (MortgageStructure, RollingCum=0, RollingInterest=0,
   
   # number of days for the period, and day-prorated interest for the month
   Days <- NULL; MthInt <- NULL
-  require(lubridate)
+  if (!require(lubridate)) {install.packages("lubridate")}
   
   if (!SmithOnGoing)
   {
@@ -191,7 +191,7 @@ SmithPortfCapAppreciation <- function (SmithGConv, SmithG){
   #
   # Interpolating NA values (linear) from the yrly compound.
   #
-  library(zoo)
+  if (!require(zoo)) {install.packages("zoo")}
   Portf <- na.approx(Portf, rule = 2)
   
   return(Portf)
