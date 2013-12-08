@@ -57,7 +57,8 @@ DividendTax <- function (DividendIncome=47888) # example from http://www.theglob
 }
 
 InterestTaxRefund <- function (Province='qc', Amount=50000, EarnedDividends=-1) {
-# CALCULATION IS PERFORMED AT MARGINAL TAX RATE applied to InterestExpenses (OK for dividend also) 
+# CALCULATION IS PERFORMED AT MARGINAL TAX RATE (MTR) applied to InterestExpenses (OK for dividend also) 
+# MTR = tax rate on the last dollar earned
 #  http://www.moneysense.ca/retire/delectable-dividends
 # 
   
