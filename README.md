@@ -1,4 +1,4 @@
-# OBJECTIVES
+# WealthManagement: OBJECTIVES
 
 The objective behind this repo is to investigate some personal wealth management strategies, from a *theoretical perspective* considering I'm no **F**inancial **P**rofessional **A**dviser ( **FPA** ). **The initial objective** is to empower 
 willing individuals with strategies available to *most citizens*, that do not benefit directly from [private wealth management advises](http://en.wikipedia.org/wiki/Wealth_management). 
@@ -27,24 +27,34 @@ is the real ground on which one may assess the risk-dependency of different fina
 understand the nature of risk and its impact on one's quality of life.
 
 # INVESTMENT DISCLAIMER
-This website is provided for general information only, and nothing contained in the material constitutes a recommendation for the purchase or sale of any investment vehicle, nor applying any specific wealth management strategy.
-Do consult a financial professional before using any information offered on this website. 
-Although the statements of fact in potential reports are obtained from sources that may be considered reliable, we do not guarantee their accuracy and any such information may be incomplete or condensed. 
-Also views expressed in this website are punctual and based on research materials available from sources that may be considered reliable. Neverthelss, such views are subject to change on the basis of additional or new research, new facts or developments, 
-and revised opinion(s). 
+Thereafter, **the Disclosing Party** refers to any author of any content of this website either directly, or indirectly through weblink. Similarly, **the Receiving Party** refers to any individual accessing the website and any content therein.
 
-The investment risks described herein are not purported to be exhaustive. Any person considering an investment should seek independent advice on the suitability or otherwise of the particular investment. 
-*Investment products and strategies are subject to risk, including possible loss of principal amount invested and therefore you should not invest money that you cannot afford to lose.* Past performance is not indicative of 
-future results: prices can go up or down.  
+The Disclosing Party provides general information only, and nothing contained in the provided material constitutes a recommendation for the purchase or sale of any investment vehicle, nor applying any specific wealth management strategy.
+Although the statements of fact in potential reports are obtained from sources that may be considered reliable, the Disclosing Party does not guarantee their accuracy and any such information may be incomplete or condensed. 
+Furthermore, such statements are subject to change on the basis of additional or new research, new facts or developments, and revised opinion(s). 
 
-The reader understands that it is his/her responsibility to seek legal and/or tax advice regarding the legal and tax consequences of his/her investment transactions. 
-If the reader changes residence, citizenship, nationality, or place of work, it is his/her responsibility to understand 
+By receiving these information and material, the Receiving Party acknowledges that the Disclosing Party is not providing financial advices tailored to its financial situation, and that said Receiving Party bears the burden of 
+investigating the appropriateness of such information and material having regard to its own objectives, needs and financial situation, **with support from competent counsel in the matter of money management as legally defined in its jurisdiction**, 
+prior acting on it.
+
+The Receiving Party understands that it is his/her responsibility to seek, from competent counsel in the matter of money management as legally defined in its jurisdiction, 
+legal and/or tax advice regarding the legal and tax consequences of his/her investment transactions. 
+If the Receiving Party changes residence, citizenship, nationality, or place of work, it is his/her responsibility to understand 
 how his/her investment transactions are affected by such change and comply with all applicable laws and regulations as and when such becomes applicable. 
-The reader understands that this website and its author(s) do not provide legal and/or tax advise and are not responsible for advising him/her on the laws pertaining to his/her transaction.
 
-We expressly disclaims all liability for the use or interpretation by others of information contained in this website. Decisions based on information contained herein are the sole responsibility of the reader, and in exchange 
-for using the information contained in this website *the reader agrees to hold the website's author(s) and its affiliates harmless against any claims for direct, or indirect, damages for decisions made by the reader based 
-fully or partially on such information.*
+The Disclosing Party expressly disclaims all liability for the use or interpretation by the Receiving Party of information and material contained in this website. Decisions are the sole responsibility of the Disclosing Party, and in exchange 
+for using the information and material contained in this website **the Receiving Party agrees to hold the Disclosing Party and its affiliates harmless against any claims for direct, or indirect, damages for decisions made by the Receiving Party based 
+fully or partially on such information.**
+
+# Risk(s) and Warning(s)
+The risks described herein are not purported to be exhaustive. **Investment products and strategies are subject to risk, including possible loss of principal amount invested and therefore you should not invest money 
+that you cannot afford to loose.** 
+
+All performance claims on this web site about any investment strategy performance must be regarded as hypothetical. There is often a vast difference between hypothetical results and real-life results achievable in an a 
+real financial account, and real-life results are almost always vastly worse than hypothetical results. Simulated or hypothetical investment strategies, in general, are also subject to the fact that they are designed with the benefit of hindsight. 
+No representation is being made that any account will or is likely to achieve profits or losses similar to these being shown.
+
+Past performance is not indicative of future results.  
 
 ## LICENSE
 [ADAPTIVE PUBLIC LICENSE V1.0](http://opensource.org/licenses/alphabetical) as stated in [LICENSE.txt](https://github.com/florentchandelier/WealthManagement/blob/master/License.txt) 
