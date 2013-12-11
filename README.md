@@ -1,4 +1,4 @@
-# WealthManagement: OBJECTIVES
+# OBJECTIVES
 
 The objective behind this repo is to investigate some personal wealth management strategies, from a *theoretical perspective* considering I'm no **F**inancial **P**rofessional **A**dviser ( **FPA** ). **The initial objective** is to empower 
 willing individuals with strategies available to *most citizens*, that do not benefit directly from [private wealth management advises](http://en.wikipedia.org/wiki/Wealth_management). 
