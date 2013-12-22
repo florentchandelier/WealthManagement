@@ -1,3 +1,6 @@
+if (!require(lubridate)) {install.packages("lubridate")}; library(lubridate)
+if (!require(zoo)) {install.packages("zoo")}; library(zoo)
+
 sourceDir <- function (path, pattern = "\\.[rR]$", env = NULL, chdir = TRUE) 
 {
   files <- sort(dir(path, pattern, full.names = TRUE))
@@ -49,7 +52,6 @@ SmithGuerrilla <- function (MortgageStructure, RollingCum=0, RollingInterest=0,
   
   # number of days for the period, and day-prorated interest for the month
   Days <- NULL; MthInt <- NULL
-  if (!require(lubridate)) {install.packages("lubridate")}
   
   if (!SmithOnGoing)
   {
@@ -191,7 +193,6 @@ SmithPortfCapAppreciation <- function (SmithGConv, SmithG){
   #
   # Interpolating NA values (linear) from the yrly compound.
   #
-  if (!require(zoo)) {install.packages("zoo")}
   Portf <- na.approx(Portf, rule = 2)
   
   return(Portf)

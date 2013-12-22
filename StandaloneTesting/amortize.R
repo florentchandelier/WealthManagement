@@ -3,6 +3,11 @@
 # http://www.acad.polyu.edu.hk/~machanck/lectnotes/c7_finan210.pdf
 # Pn = P0(1 + i)^n    ; Pn
 
+if (!require(lubridate)) {install.packages("lubridate")}; library(lubridate)
+if (!require(ggplot2)) {install.packages("ggplot2")}; library(ggplot2)
+if (!require(scales)) {install.packages("scales")}; library(scales)
+if (!require(plyr)) {install.packages("plyr")}; library(plyr)
+
 Compounding <- function (Amount, Rate, NbPeriods, Forward=TRUE)
 {
   # output the Amount compounded over the given period at Rate
@@ -71,7 +76,6 @@ YrlyMortgageSturcture <- function (NAiR=7.5/100, yrs=5, CompPeriod=2, NbYrlyPaym
   RemainingBalance <- balance
   
   Init = TRUE
-  if (!require(lubridate)) {install.packages("lubridate")}
   while (RemainingBalance > 0 && (month(PayDay)<12 || Init) )
   { 
     Init = FALSE
@@ -92,15 +96,11 @@ DisplayMortgage <- function(NbComponents, RenderData, Label, XRef, Title, YLegen
   Plotdata <- data.frame(
     Schedule=rep(XRef,NbComponents), Mortgage=RenderData, 
     Legend=gl(NbComponents,length(XRef),labels=Label)  )
-  
-  
-  if (!require(ggplot2)) {install.packages("ggplot2")}
-  if (!require(scales)) {install.packages("scales")}
+
   p <- ggplot(aes(x=Schedule, fill=Legend), data=Plotdata) + geom_line(aes(y= Mortgage, color=Legend))
   #p <- p + geom_point(aes(y= RenderPoint, color=LabelPoint))
   
   
-  if (!require(plyr)) {install.packages("plyr")}
   fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
   p <- p + scale_y_continuous(label=fmtExpLg10)
   p <- p + ggtitle(Title) + ylab(YLegend) + xlab(XLegend)
@@ -123,7 +123,7 @@ amortize <- function(loan, payment, apr_IN_percent, months) {
   interest  <- ifelse(month < month[complete], interest, 
                       interest[complete-1])
   
-  if (!require(scales)) {install.packages("scales")}
+
   StartDate = as.Date(format(Sys.Date(), format="%Y-%m-%d"))
   timeline <- seq(StartDate,  length=months ,by="1 month")
   
