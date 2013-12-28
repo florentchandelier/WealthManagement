@@ -74,7 +74,7 @@ containing fictional Income sources,
 house value, mortgage rates and so on. As such, by duplicating such directory into a private one, one may be able to protect his/her financial information while benefiting from, and contributing to the project.
  
 ### DIR ~ StandaloneTesting
-Contains R-scripts for **SINGLE PURPOSE INVESTIGATIONS** of specific investment strategies. The objective is to get a feel for different strategies prior further work.
+Contains R-scripts for **SINGLE PURPOSE INVESTIGATIONS** of specific investment strategies (such as the Smith Manoeuvre). The objective is to get a feel for different strategies prior further work.
 The code itself is meant to be self-explanatory rather than optimized, with web references for definition/explanation/formulae
 
 > REFER TO [Notes_StandaloneTesting](https://github.com/florentchandelier/WealthManagement/blob/master/StandaloneTesting/Notes_StandaloneTesting.md) FOR DETAILS.
