@@ -5,10 +5,11 @@ LoanStructure$HomeValue <- 450000
 LoanStructure$CashDown <- 20/100*LoanStructure$HomeValue
 LoanStructure$PaymentPercentSalary <- 30/100
 
-LoanStructure$HomeEquityLineOfCredit$Value <- LoanStructure$HomeValue-LoanStructure$CashDown
+#LoanStructure$HomeEquityLineOfCredit$Value <- LoanStructure$HomeValue-LoanStructure$CashDown
 LoanStructure$HomeEquityLineOfCredit$AnnuelRate <- 3.5/100 # usually this is variable rates
 
-LoanStructure$Loan$Value <- 300000
+LoanStructure$Loan$Value <- LoanStructure$HomeValue-LoanStructure$CashDown #300000
+LoanStructure$DateLoanOpen <- NULL # as.Date(format("2010-10-01", format="%Y-%m-%d")) # 2010-10-01
 LoanStructure$Loan$AnnualRate <- 3.00/100 # nominal annual interest rate: NAIR
 LoanStructure$Loan$Months <- 12 # to be accounted for if using variable rates
 LoanStructure$Loan$CompPeriod <- 2; # usually loan compounds semi-annually

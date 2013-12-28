@@ -13,8 +13,9 @@ SmithManoeuvreGuerillaInit <- function (InitialDate)
 {
   # P2S portion of the Principal (P) transfered to (2) the Smith (S) portfolio, accounting for Guerrilla interest capitalization
   # P2G portion of the Principal (p) used for Guerrilla (G) interest capitalization
+  # - Portf: value of the P2S portfolio accounting for Capital Appreciation
   structure <- list(Schedule=InitialDate, P2S=0, P2G=0, PeriodicInterest=0,
-                    InterestTaxRefund=0, PortfYrlyDiv = 0)
+                    InterestTaxRefund=0, PortfYrlyDiv = 0, Portf = 0)
   return(structure)
 }
 
@@ -123,12 +124,14 @@ SmithGuerrilla <- function (MortgageStructure, RollingCum=0, RollingInterest=0,
   return (SMG)
 }
 
+
+
 SmithPortfYieldAdjusted <- function (Portf, PortfNewContrib=0)
 {
   # PortfValue: Value of the current Portf without accounting for new yearly contribution (capital appreciation should be accounted for)
   # PortfNewContrib: Portion of the new yearly contribution (no capital appreciation yet)
   
-  # We determine the size of new contribution per year, along with its expected yield, 
+  # We determine the size of new contribution per year, along with its expected yield,
   # THEN further add the expected yield of the Compounded Capital Appreciation adjusted for previous contributions
   # within the portfolio, separately for each year AS CAPITAL APPRECIATION IS DEPENDENT ON CONTRIBUTION TIME.
   AdjustedYrlyYield = 0;
@@ -140,13 +143,20 @@ SmithPortfYieldAdjusted <- function (Portf, PortfNewContrib=0)
   # - This is based on calendar years
   FirstYear = min(year(Portf$Schedule))
   LastYear = max(year(Portf$Schedule))
+
+  #
+  # Div Yield is determined on Capital Appreciation, and is calculated as follows: [$_yr1 ....$_yrN] + [$_yr2....$_yrN] + ... + [$_yrN-1 ... yr_N]
+  # - Compounding each year independently, based on the yearly accumulated cash in the Principal applied toward Smith (P2S) 
+  # and discarding the Guerrilla portion applied toward the Interest (P2G)
+  # - Determining the value of the dividens corresponding to the yearly compounded results
+  #
   
   for (i in FirstYear:LastYear)
   {
     CapitalAppreciation <- Compounding(max(cumsum(Portf$P2S[year(Portf$Schedule)==i])),
-                                       Income$SmithPortfYrlyCapitalAppreciationRate, 
+                                       Income$SmithPortfYrlyCapitalAppreciationRate,
                                        LastYear-i+1)
-    AdjustedYrlyYield <- AdjustedYrlyYield + CapitalAppreciation *  Income$SmithPortfYrlyDivYield
+    AdjustedYrlyYield <- AdjustedYrlyYield + CapitalAppreciation * Income$SmithPortfYrlyDivYield
   }
   
   
@@ -164,18 +174,18 @@ SmithPortfCapAppreciation <- function (SmithGConv, SmithG){
   # We work on SmithG$Schedule as SmithGConv contains lots of additional NAs component
   # that result in calculation irregularities once Principal is fully readvanced BUT
   # Last year is determined on SmithGCvonv for TOTAL compounding nb of years
-  FirstYear = min(year(SmithGConv$Schedule));  LastYear = max(year(SmithGConv$Schedule))
+  FirstYear = min(year(SmithGConv$Schedule)); LastYear = max(year(SmithGConv$Schedule))
   
   if (max(month(SmithGConv$Schedule[year(SmithGConv$Schedule) == LastYear])) < 6 )
-  {LastYear = LastYear - 1; } # exclude last year for compounding if repaid prior half-year    
+  {LastYear = LastYear - 1; } # exclude last year for compounding if repaid prior half-year
   
   # THE FOLLOWING REPRESENTS THE MAXIMUM VALUE OF THE PORTFOLIO AT THE END OF THE PORTF CONVERSION.
   # THIS IS USED FOR VALIDATION ONLY !
   #
   # CapitalAppreciation <- 0
-  # for (i in FirstYear:max(year(SmithG$Schedule))) 
+  # for (i in FirstYear:max(year(SmithG$Schedule)))
   # { CapitalAppreciation <- CapitalAppreciation + Compounding(max(cumsum(SmithG$P2S[year(SmithG$Schedule)==i])),
-  #                       Income$SmithPortfYrlyCapitalAppreciationRate, LastYear-i)
+  # Income$SmithPortfYrlyCapitalAppreciationRate, LastYear-i)
   # }
   
   for (i in FirstYear:LastYear)
@@ -198,10 +208,18 @@ SmithPortfCapAppreciation <- function (SmithGConv, SmithG){
   return(Portf)
 }
 
-PostSmithGuerilla_Conversion <- function (MhtlyContrib, Smith, ReAdv_DailyInterest=LoanStructure$HomeEquityLineOfCredit$AnnuelRate / 365)
+
+PostSmithGuerilla_Conversion <- function (MhtlyContrib, Smith, LeftOverBalanceReimb=0, ReAdv_DailyInterest=LoanStructure$HomeEquityLineOfCredit$AnnuelRate / 365)
 {  
   
   HELOC <- cumsum(Smith$P2S)+cumsum(Smith$P2G)
+  
+  #
+  # Applying the rest of the Smith Action used to convert the non-deduct mortgage toward a deductable Mortgage directly
+  # toward the HELOC that we are now attacking with a 0-debt objective
+  #
+  HELOC[length(HELOC)] <- HELOC[length(HELOC)] - LeftOverBalanceReimb
+  
   StartConv <- Smith$Schedule[length(Smith$Schedule)]
   StartIndex <- length(Smith$Schedule)
   
@@ -212,25 +230,62 @@ PostSmithGuerilla_Conversion <- function (MhtlyContrib, Smith, ReAdv_DailyIntere
     Smith$Schedule <- append(Smith$Schedule, PayDay)
     
     # We assume no contribution are added to the Smith's Portfolio
+    # DO NOT USE 'NA' as this disrupt the calculation (will be translated to NA at the end)
     Smith$P2S <- append(Smith$P2S, 0)
     Smith$P2G <- append(Smith$P2G, 0)
     
     HELOCtemp <- HELOC[length(HELOC)]
     
-    # Keep paying same Amout toward Mortgage into HELOC (re-advanceable mortgage LOC)
-    # considering we need to pay for monthly interest on the HELO anyways
+    # Keep paying same monthly 'home mortgage' $$ amout into HELOC (re-advanceable mortgage LOC)
+    # - Keep adding on monthly interest on the HELOC (w/ daily interest calculation)
+    # - Portfolio yield is contributed once a year to 'attacking' HELOC, in december (=12th month)
+    # - Income tax shred is contributed once a year
     if (month(PayDay) < 12)
     {
-      HELOCtemp <- HELOCtemp - MhtlyContrib - 
-        HELOCtemp*as.numeric(difftime(PayDay, Schedule, units="days"))*ReAdv_DailyInterest
-    }else {
-      HELOCtemp <- HELOCtemp - MhtlyContrib - 
-        HELOCtemp*as.numeric(difftime(PayDay, Schedule, units="days"))*ReAdv_DailyInterest;
-      # Contribute Dividends to reimburse the HELOC      
-      HELOCtemp <- HELOCtemp - SmithPortfYieldAdjusted(Smith)
+      # formula is (1+interest)-contribution (monthly contribution only)
+      HELOCtemp <- HELOCtemp*(1+as.numeric(difftime(PayDay, Schedule, units="days"))*ReAdv_DailyInterest) - MhtlyContrib; 
+    }
+    else if (month(PayDay) == Income$TaxPeriod) {
       
-      # Contribute TaxRefund on Interest on HELOC
-      HELOCtemp <- HELOCtemp - HELOCtemp * LoanStructure$HomeEquityLineOfCredit$AnnuelRate * Income$TaxRate
+      # formula is (1+interest)-contribution (monthly contribution + tax refund)
+      
+      HELOCtemp <- HELOCtemp*(1+as.numeric(difftime(PayDay, Schedule, units="days"))*ReAdv_DailyInterest) - MhtlyContrib;
+      
+      # Contribute Tax Refund on Interest to reimburse the HELOC
+      # x months interest on the first year (depending when home mortgage started); x = TaxMonth - StartMort_Month
+      # 12 months interests after the first year
+#      HELOCtemp <- HELOCtemp*(1-LoanStructure$HomeEquityLineOfCredit$AnnuelRate * Income$TaxRate)
+      
+      # on first year, x may be the year before, and few months before TaxMonth
+      if (year(PayDay) - year(StartConv) <=1 )
+      {
+        # number of days for the interest on the "first HELOC conversion to 0-debt year" - using days as unit to determine total interests
+        # - accounting for the month of the current year (at which we pay tax)
+        # - accounting for the month of the previous year (if any, based on the difference of StartConv year with Tax year)
+        InterestExpenses = HELOCtemp * (as.numeric(difftime(PayDay, StartConv, units="days"))*ReAdv_DailyInterest)
+      }
+      else{
+        InterestExpenses = HELOCtemp * LoanStructure$HomeEquityLineOfCredit$AnnuelRate
+      }
+      
+      InterestTaxRefund <- InterestTaxRefund(Income$Province, InterestExpenses, max(Smith$PortfYrlyDiv))
+      HELOCtemp <- HELOCtemp - InterestTaxRefund;
+      
+    }
+    # else if applied on the EoY (in december, month=12)
+    else {
+      HELOCtemp <- HELOCtemp*(1+as.numeric(difftime(PayDay, Schedule, units="days"))*ReAdv_DailyInterest) - MhtlyContrib;
+      
+      # determining the Dividend gain for the year from the current portfolio, assuming only 1/2 of the current
+      # year "fresh cash" contributes to these dividends (hypothesizing that dividend schedules and cash deposits may
+      # not be ideal based on dividend pay-dates).
+      # - NO NEW CONTRIBUTION considering we are attacking the HELOC to nullify the debt
+      
+      # Contribute Dividends to reimburse the HELOC
+      AfterTaxDividends <- SmithPortfYieldAdjusted(Smith, 0)
+      HELOCtemp <- HELOCtemp - AfterTaxDividends
+      
+      Smith$PortfYrlyDiv <- append(Smith$PortfYrlyDiv,AfterTaxDividends)
     }
     
     HELOC <- append(HELOC, HELOCtemp)
@@ -238,8 +293,10 @@ PostSmithGuerilla_Conversion <- function (MhtlyContrib, Smith, ReAdv_DailyIntere
   }
   
   if (HELOC[length(HELOC)] < 0) {HELOC[length(HELOC)] <- 0}
-  Smith$HELOC <- HELOC
   
+  Smith$HELOC <- HELOC
+
+  # only for format graph display purposes as P2S and P2G are no longer involved during the conversion of HELOC to a 0-debt
   Smith$P2S[StartIndex:length(Smith$P2S)] <- NA
   Smith$P2G[StartIndex:length(Smith$P2G)] <- NA
   
@@ -249,12 +306,16 @@ PostSmithGuerilla_Conversion <- function (MhtlyContrib, Smith, ReAdv_DailyIntere
 
 SmithManoeuvre <- function ()
 {
-  TotalLoan = LoanStructure$HomeValue;# Mortgage Balance
+  
+  TotalLoan = LoanStructure$Loan$Value #LoanStructure$HomeValue;# Mortgage Balance
   NAiR=LoanStructure$Loan$AnnualRate; 
   yrs=LoanStructure$Loan$TermInYrs; 
   CompPeriod=LoanStructure$Loan$CompPeriod; 
-  NbYrlyPayment=LoanStructure$Loan$Months; 
-  DateLoanOpen = as.Date(format(Sys.Date(), format="%Y-%m-%d"))
+  NbYrlyPayment=LoanStructure$Loan$Months;
+  
+  if (is.null(LoanStructure$DateLoanOpen)) {
+    DateLoanOpen = as.Date(format(Sys.Date(), format="%Y-%m-%d"))} else {
+      DateLoanOpen = LoanStructure$DateLoanOpen}
   
   Mtg = MortgageStructureInit(DateLoanOpen, TotalLoan);
   
@@ -263,6 +324,9 @@ SmithManoeuvre <- function ()
                                      Mtg$Balance[length(Mtg$Balance)], 
                                      Mtg$Schedule[length(Mtg$Schedule)]);
     Mtg <- mapply(c, Mtg, MtgTemp, SIMPLIFY=FALSE)  }
+  
+  
+  DebtRatio = DebtRatioValidation (Mtg$Principal[8] + Mtg$Interest[8]);
   
   NbComponents = 3
   RenderData = c(cumsum(Mtg$Principal), cumsum(Mtg$Interest), Mtg$Balance)
@@ -316,21 +380,37 @@ SmithManoeuvre <- function ()
     # re-advanceable mortgage)
     #
     SmithAction <- SMGTemp$InterestTaxRefund + SMGTemp$PortfYrlyDiv
+    
     MtgSmith$Principal[length(MtgSmith$Principal)] <- MtgSmith$Principal[length(MtgSmith$Principal)] + SmithAction
     MtgSmith$Balance[length(MtgSmith$Balance)] <- MtgSmith$Balance[length(MtgSmith$Balance)] - SmithAction
     
     SMGTemp$P2S[length(SMGTemp$P2S)] <- SMGTemp$P2S[length(SMGTemp$P2S)] + SmithAction
     
     SmithG <- mapply(c, SmithG, SMGTemp, SIMPLIFY=FALSE)
+    
   }
   
+  #
+  # As we are using the smith action (dividends) against the home loan, on the last reimbursement we will use the
+  # remaining of the proceedings (variable SmithActionLeftOver) directly on the HELOC we must now convert to a debt=0 
+  #
+  LeftOverSmithAction <- abs(min(MtgSmith$Balance));
+  test <- abs(LoanStructure$Loan$Value - max(cumsum(MtgSmith$Principal)) )  
+  if (abs(test-LeftOverSmithAction) > 1) { 
+    print(" ERROR LeftOverSmithAction") } else {
+      SmithPrincipal <- cumsum(MtgSmith$Principal); SmithPrincipal[length(SmithPrincipal)] <- LoanStructure$Loan$Value;
+      MtgSmith$Balance[length(MtgSmith$Balance)] <- 0;
+    }
+  
   NbComponents = 3
-  RenderData = c(cumsum(MtgSmith$Principal), cumsum(MtgSmith$Interest), MtgSmith$Balance)
+  RenderData = c(SmithPrincipal, cumsum(MtgSmith$Interest), MtgSmith$Balance)
   Label = c( "Smith Mort.Principal", "Smith Mort.Interest", "Smith Mort.Balance")
   Title = paste("Smith Manoeuvre with Guerrilla Capitalization, Mortgage component only"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   XRef = MtgSmith$Schedule
   
   DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  if (abs(max(cumsum(SmithG$P2S))-LeftOverSmithAction +max(cumsum(SmithG$P2G)) - LoanStructure$Loan$Value) > 10)
+  {print(" ERROR: P2S + P2G NOT EQUAL total loan after smith conversion")} 
   
   #############################################
   # Smith Manoeuvre Action on Mortgage payment
@@ -338,7 +418,8 @@ SmithManoeuvre <- function ()
   
   SmithGainPercent <- as.numeric(difftime(Mtg$Schedule[length(Mtg$Schedule)] , MtgSmith$Schedule[length(MtgSmith$Schedule)], units="days") ) / 
     as.numeric(difftime(Mtg$Schedule[length(Mtg$Schedule)] , Mtg$Schedule[1], units="days"))
-  paste("Using the Smith Manoeuvre helped repay the mortgage ", round(100*SmithGainPercent), "% faster than classical 25yrs mortgage")
+  print(paste("Using the Smith Manoeuvre helped repay the mortgage in ", year(MtgSmith$Schedule[length(MtgSmith$Schedule)]) - year(MtgSmith$Schedule[1]),
+              " years, that is ", round(100*SmithGainPercent), "% faster than classical 25yrs mortgage"))
   
   #########################################
   # Plot the Smith Vs Traditional Mortgage
@@ -350,10 +431,15 @@ SmithManoeuvre <- function ()
   TraditionalBalance = Mtg$Balance
   SmithMtgInterest = rep(NA,length(Mtg$Schedule)); SmithMtgInterest[1:length(MtgSmith$Interest)] = cumsum(MtgSmith$Interest); #SmithMtgInterest[SmithMtgInterest==-1] = max(SmithMtgInterest)
   SmithBalance = rep(NA,length(Mtg$Schedule)); SmithBalance[1:length(MtgSmith$Balance)] = MtgSmith$Balance;
+  
+  SmithBalance[length(MtgSmith$Balance)] <- SmithBalance[length(MtgSmith$Balance)]
+  
+  # This is the part of the HELOC being transformed into a portfolio (SmithG$P2S) ; The rest of the HELOC is the guerrilla portion
+  # we've used to pay for the interest of the HELOC-portfolio portion (SmithG$P2G).
   SmithPortfolio = rep(NA,length(Mtg$Schedule)); SmithPortfolio[1:length(SmithG$P2S)] = cumsum(SmithG$P2S)
   
   RenderData = c(TraditionalBalance, TraditionalInterest, SmithBalance, SmithMtgInterest, SmithPortfolio)
-  Label = c("Mort.Balance", "Mort.Interest", "Smith Mort.Balance", "Smith Mort.Interest", "Smith.Portfolio w/o Capital Appreciation")
+  Label = c("Mort.Balance", "Mort.Interest", "Smith Mort.Balance", "Smith Mort.Interest", "Smith.Portf w/o Capital Appreciation (=heloc w/o Guerrilla cost)")
   Title = paste("Mortgage Structure Versus Smith w/ Guerrilla"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   XRef = Mtg$Schedule
   
@@ -364,7 +450,7 @@ SmithManoeuvre <- function ()
   # into debt-free Portfolio
   ############################################################################################################
   MhtlyContrib <- MtgSmith$Interest[MtgSmith$Interest>0][1] + MtgSmith$Principal[MtgSmith$Principal>0][1]
-  SmithGConv <- PostSmithGuerilla_Conversion(MhtlyContrib, SmithG)
+  SmithGConv <- PostSmithGuerilla_Conversion(MhtlyContrib, SmithG, LeftOverSmithAction)
   
   NbComponents = 7
   
@@ -372,7 +458,8 @@ SmithManoeuvre <- function ()
   SmithMtgInterest = rep(NA,length(SmithGConv$Schedule)); SmithMtgInterest[1:length(MtgSmith$Interest)] = cumsum(MtgSmith$Interest);
   TraditionalBalance = rep(NA,length(SmithGConv$Schedule)); TraditionalBalance[1:length(Mtg$Balance)] = Mtg$Balance
   SmithBalance = rep(NA,length(SmithGConv$Schedule)); SmithBalance[1:length(MtgSmith$Balance)] = MtgSmith$Balance;
-  SmithPortfolio = rep(NA,length(SmithGConv$Schedule)); SmithPortfolio[1:length(SmithG$P2S)] = cumsum(SmithG$P2S)
+  SmithPortfolio = rep(NA,length(SmithGConv$Schedule)); SmithPortfolio[1:length(SmithGConv$P2S)] = cumsum(SmithGConv$P2S)
+  
   PortfCapital <- SmithPortfCapAppreciation (SmithGConv, SmithG)
   
   RenderData = c(TraditionalBalance, TraditionalInterest, SmithBalance, 
@@ -384,4 +471,12 @@ SmithManoeuvre <- function ()
   
   DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
   
+  # Output data
+  return(  list(MortgageSchedule=Mtg$Schedule, 
+                MortgagePrincipal=cumsum(Mtg$Principal), MortgageInterest=cumsum(Mtg$Interest), MortgageBalance=Mtg$Balance,
+             SMwG_Schedule=MtgSmith$Schedule,
+                SMwG_Principal=cumsum(MtgSmith$Principal), SMwG_Interest=cumsum(MtgSmith$Interest), SMwG_Balance=MtgSmith$Balance,
+             SMwG_PortSchedule=SmithGConv$Schedule,
+             SMwG_PortfCapitalAppreciation=SmithGConv$P2S, SMwG_HELOCPortfConversion=SmithGConv$HELOC, SMwG_PortfDiv=SmithGConv$PortfYrlyDiv)
+        )
 }

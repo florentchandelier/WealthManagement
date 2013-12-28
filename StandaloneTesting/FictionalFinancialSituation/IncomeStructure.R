@@ -14,17 +14,27 @@ LifeInsurance$TotalDeathBenefit <- c(2298042, 2300030, 2304550, 2311490, 2320794
                                      2741172, 2815859, 2890223, 2963380, 3034963)
 
 Income <- NULL
-Income$TaxRate <- 35/100 # tax bracket
 Income$GrossSalary <- 70000
-Income$DivTax <- 35/100
+#Income$DivTax <- 35/100
 Income$CapGainTax <- 25/100
+
 Income$Province <- 'qc'
+Income$TaxPeriod <- 4 #April
+
 #Income$Salary <- LoanStructure$GrossSalary * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
 #Income$Bonus <- LoanStructure$GrossSalary * 7/100 * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
 
 Income$SmithPortfYrlyDivYield <- 4/100 # dividend in $$ per share, divided by the price per share
 Income$SmithPortfContribDiv <- 1/2 # only half of new contribution to Portf contributes to End Of Year Dividend Gain.
 Income$SmithPortfYrlyCapitalAppreciationRate <- 3/100 # rise in the value of an asset STRICTLY based on a rise in market price
+
+DebtRatioValidation <- function (Contribution, Salary=Income$GrossSalary)
+{
+    test <- Contribution*12 / (Salary/2)
+    if (test < 0.3) {print(paste("SUCCESS: your DEBT RATIO of ",test*100,"% is below the recommended 30%")); return(test);} else {
+      print(paste("CAREFUL: your DBT RATIO of ",test*100, "% is above the recommended 30%")); return(test);
+    }
+}
 
 DividendTax <- function (DividendIncome=47888) # example from http://www.theglobeandmail.com/globe-investor/investment-ideas/strategy-lab/dividend-investing/you-do-the-math-almost-50000-in-earned-dividends-0-in-tax/article4599950/
 {
@@ -47,7 +57,9 @@ DividendTax <- function (DividendIncome=47888) # example from http://www.theglob
   
   # in 2013: federal dividend tax credit is 15.0198% : http://www.cra-arc.gc.ca/tx/ndvdls/tpcs/ncm-tx/rtrn/cmpltng/ddctns/lns409-485/425-eng.html
   # http://www.taxtips.ca/dtc/enhanceddtc/enhanceddtcrates.htm
-  if (Income$Province =='on') {ProvDTC = 6.4/100} else if (Income$Province == 'qc') {ProvDTC = 11.9/100}
+  if (Income$Province =='on') {ProvDTC = 6.4/100} 
+  else if (Income$Province == 'qc') {ProvDTC = 11.9/100}
+  
   FedDTC = 15.0198/100
   EffectiveDividends = DivPreCorporateTax * (ProvDTC+FedDTC)
   

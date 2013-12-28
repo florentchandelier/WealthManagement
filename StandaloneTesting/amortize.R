@@ -31,11 +31,6 @@ InvestmentPerfCompounded <- function (Amount, Rate, NbYearsContrib, NbYearsCompo
       Tot = c(Tot, max(Tot) +Gain)}
   }
   return(Tot)
-
-#   R = 0
-#   for (i in 1:NbYearsContrib)
-#   { R = R + (1+Rate)^i }
-#   return(Compounding(Amount*R, Rate, NbYearsCompound-NbYearsContrib))
 }
 
 MonthlyAmortization  <- function(loan, apr_IN_percent, months) {
@@ -98,8 +93,6 @@ DisplayMortgage <- function(NbComponents, RenderData, Label, XRef, Title, YLegen
     Legend=gl(NbComponents,length(XRef),labels=Label)  )
 
   p <- ggplot(aes(x=Schedule, fill=Legend), data=Plotdata) + geom_line(aes(y= Mortgage, color=Legend))
-  #p <- p + geom_point(aes(y= RenderPoint, color=LabelPoint))
-  
   
   fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
   p <- p + scale_y_continuous(label=fmtExpLg10)
@@ -131,7 +124,6 @@ amortize <- function(loan, payment, apr_IN_percent, months) {
                principal = principal[-1], interest = interest[-1],
                paid = principal[-1] + interest[-1], loan=loan,
                payment=payment, apr=apr_IN_percent)
-  #class(amrt) <- "amortization"
   return(amrt)
   
 }
