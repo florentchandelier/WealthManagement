@@ -74,7 +74,14 @@ YrlyMortgageSturcture <- function (NAiR=7.5/100, yrs=5, CompPeriod=2, NbYrlyPaym
   while (RemainingBalance > 0 && (month(PayDay)<12 || Init) )
   { 
     Init = FALSE
+    
+    #
+    # We assume payments every month; [Get max number of days for new month] and change accordingly
+    # - We must pay attention to the number of days per month (otherwise NA will be stored instead of dates); 
+    #     . starting on the 29/30 is tricky for the month of february
+    #
     month(PayDay) <- month(PayDay) + 1
+    
     Schedule <- append(Schedule, PayDay)
     
     Interest <- append(Interest, RemainingBalance * RatePerPayment)

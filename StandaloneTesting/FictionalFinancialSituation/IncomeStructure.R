@@ -15,14 +15,11 @@ LifeInsurance$TotalDeathBenefit <- c(2298042, 2300030, 2304550, 2311490, 2320794
 
 Income <- NULL
 Income$GrossSalary <- 70000
-#Income$DivTax <- 35/100
 Income$CapGainTax <- 25/100
+#Income$Bonus <- LoanStructure$GrossSalary * 7/100 * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
 
 Income$Province <- 'qc'
 Income$TaxPeriod <- 4 #April
-
-#Income$Salary <- LoanStructure$GrossSalary * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
-#Income$Bonus <- LoanStructure$GrossSalary * 7/100 * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
 
 Income$SmithPortfYrlyDivYield <- 4/100 # dividend in $$ per share, divided by the price per share
 Income$SmithPortfContribDiv <- 1/2 # only half of new contribution to Portf contributes to End Of Year Dividend Gain.
