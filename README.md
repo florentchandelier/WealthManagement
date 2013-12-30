@@ -73,7 +73,7 @@ Furthermore, **to preserve the confidentiality of personal financial information
 containing fictional Income sources, 
 house value, mortgage rates and so on. As such, by duplicating such directory into a private one, one may be able to protect his/her financial information while benefiting from, and contributing to the project.
 
-See major changes in the [CHANGELOG](../blob/master/ChangeLog.md) *WIP for automatic generation from git-bash*
+See major changes in the [CHANGELOG](../master/ChangeLog.md) *WIP for automatic generation from git-bash*
  
 ### DIR ~ StandaloneTesting
 Contains R-scripts for **SINGLE PURPOSE INVESTIGATIONS** of specific investment strategies (such as the Smith Manoeuvre). The objective is to get a feel for different strategies prior further work.
