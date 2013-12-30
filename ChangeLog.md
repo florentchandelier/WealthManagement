@@ -1,0 +1,45 @@
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/2a6409de3f01898786942d177d9b9c42a6c22957) Improving on the ChangeLog script to automatically extract only commits with #changelog in them. The new script is: git log --pretty=format:'[view commit] (http://github.com/florentchandelier/WealthManagement/commit/%H) %s' --first-parent | grep "#changelog" | grep -v Merge > ChangeLog.md #changelog
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/96fb1a500faee4599f36706baba905cd2e855966) aesthetic modification of README.md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/64bce86f0a5b67f16ccf0f1882c84e1c5112a7fb) Fixes #1 and Fixes #2 new addition(s): - ChangeLog (with automated script) new function(s): - DebtRatioValidation () : rough but a necessary reminder for the future
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/3a74761aeb3fdc6675e43d646afdeddfdddba99b) Create initial ChangeLog.md ; git bash command: git log --pretty=format:'<li> <a href="http://github.com/florentchandelier/WealthManagement/commit/%H">view commit &bull;</a> %s</li>' --first-parent > ChangeLog.md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/440188fcfb71c37e81aa05163f8a908de00229f3) update Readme with last R and RStudio tested version
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/7e3903c8ba2539237b3689942568bd133495249f) add missing 'library' after 'require' and 'install' to automatically fetch the required libraries at 'source-time'
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/81611a312b7f2e916dd779dcfeaa21c78104055b) *
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/541ec01cf9bddd5b3726c270765027c062e55ad9) reformatting disclaimer
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/276f37fe037ac355eb2eefe0c1e64a5cae1d7289) aesthetic
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/9525153e8e3205c08e40798093772dbc5ceed67c) General: (1) Path modification of the sourced .R scripts for compatibility, (2) use require/install to automatically install required package and (3) update the Smith.md notes
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/bedbbe28a71a805a13f49d05adfa1f209d0dbcf9) Update Notes_StandaloneTesting.md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/71cd61718576311616987dea249f3e9b8a6c8800) Determining proper Dividends based on tax credits considerations per provinces (Quebec and Ontario).
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/2788da04134c8e741f2aca75e50d62cae78e05ba) Motivations for the Loan-Annuity program
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/409d8d0e2d27bc3e4b5ea808f62bca15bd81d65d) update (wording)
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/cb64b7eef79fd0a0bc083acb0e35c84d415a41bc) Add the CollateralForAnnuity function in the amortize.R module as a first step toward building proper collateral for receiving a "retirement annuity".
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/b4b94b23b4c17859e7271f7261ac3c342be2469d) Merge branch 'master' of github.com:florentchandelier/WealthManagement
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/58d49718f1d1d60a93941979ee595685b4fd1566) correcting http redirection
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/98c2c445d96335a3e0c48bf6cb7a555a56327976) add testing section
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/3d715b467ce26043c120c6d232cebc42711d7c58) NUMBER OF DAYS PER MONTH NOW ACCOUNTED FOR
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/7f922ddcfb293e7038909e6ff7a9fc9aca7ac444) Merge branch 'master' of github.com:florentchandelier/WealthManagement
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/687bbaac7c41986d55879d5b669187dbc4293e48) format correction
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/25dc7f5a6eaaa0bbf6764e17fd2490f2c43ed4a8) damned mark up !
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/39a2ee92ebf9352b2bbbd20a68a5ddf78920751c) * corrections in the readme
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/7374b4a4ee6b0351500384cc3f1acc27534dd8aa) Merge branch 'master' of github.com:florentchandelier/WealthManagement
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/bfca2be2dd39bb74b01a9aa67d0cd58446f73681) updated readme
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/32dc05a8e8655a92cbf1d7f603ce7be4ed7c1ce1) updated readme
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/11a935f39aa7c28ffeaf1f4cdb329d424ae23052) add separate readme for the standalone testing directory
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/2651b20a7b21812e6254d7504ab333dd0130a098) aDDING SEPARATE README NOTE FOR the standalonetesting directory
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/6f3511596483dd214ce35ac16380c9b8d1c8991a) test
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/8bc8f953b71fa46694079a58ff97e7281fc13734) added url for license
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/bb271de935fd57cceac0aa303c29dd8b11616609) Initial description of project and motivation along with Licensing terms
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/3c2be6d93e68ba689dd1e37d348afa3867507052) testing markdown for license
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/cf5dbdabb8b687aafb9d8ee3e2724518bb67f75c) Graph output for Smith Maneuver
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/8e55132c24e148ca883ba4863b80fa701a7c9615) .
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/9fd14a3251bff91dff128b6586b578846bb360eb) Dir change name
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/8a9a61d2b9b25d0d5a497c3387d6afb7847cacf1) Initial Commit of the Smith Maneuver implementation with interest guerilla
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/1a402a6ecd66e8cbf85de27267027b5339172a6f) Updating README.md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/dd54a126ca7b4dc2a40833fc0968ea1e46b29f39) Update README.md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/57713d6d0c5d70f906547ea976615c4fe49f3aaa) """ python marker
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/5eeea3b7b66cdcbe73eba990562f248473eee9b0) readme with python
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/7e5a10e0c86db3f2965e3dc2a6c020bc60cd5ad8) liability md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/5737a485cca50c7a4bbc2edcf6d295cbe34563bc) md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/1182c3d5a931ab4c101d1066cfeb7271150d52ea) disclaimer md
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/8f4cc79a1a5b09768bfffaa41a7a4fe27670f998) disclaimer
+- [view commit](http://github.com/florentchandelier/WealthManagement/commit/4617e569d8b1fd48c23df6c033811137fb21b65b) Initial commit
