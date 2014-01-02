@@ -74,6 +74,24 @@ containing fictional Income sources,
 house value, mortgage rates and so on. As such, by duplicating such directory into a private one, one may be able to protect his/her financial information while benefiting from, and contributing to the project.
 
 See major changes in the [CHANGELOG](../master/ChangeLog.md) *WIP for automatic generation from git-bash*
+
+### CODE/GIT CONVENTIONS
+(eventually, not yet decided: The overall git branching model shall follow the well-illustrated [successful git branching model](http://nvie.com/posts/a-successful-git-branching-model/).)
+
+Branch naming conventions shall follow that of [GroupName/Info](http://stackoverflow.com/questions/273695/git-branch-naming-best-practices):
+
+1. Use **grouping names** at the beginning of your branch names.
+2. Define and use short **lead tokens** to differentiate branches in a way that is meaningful to your workflow.
+3. Use slashes to separate parts of your branch names.
+4. Do not use bare numbers as leading parts.
+5. Avoid long descriptive names for long-lived branches.
+
+Grouping Names: Short and well-defined group names (used to tell you to which part of your workflow each branch belongs):
+
+- **wip** Works in progress; stuff I know won't be finished soon
+- **feat** Feature I'm adding or expanding
+- **bug** Bug fix or experiment
+- **junk** Throwaway branch created to experiment
  
 ### DIR ~ StandaloneTesting
 Contains R-scripts for **SINGLE PURPOSE INVESTIGATIONS** of specific investment strategies (such as the Smith Manoeuvre). The objective is to get a feel for different strategies prior further work.

@@ -445,20 +445,30 @@ SmithManoeuvre <- function ()
   MhtlyContrib <- MtgSmith$Interest[MtgSmith$Interest>0][1] + MtgSmith$Principal[MtgSmith$Principal>0][1]
   SmithGConv <- PostSmithGuerilla_Conversion(MhtlyContrib, SmithG, LeftOverSmithAction)
   
-  NbComponents = 7
+  NbComponents = 6
   
   TraditionalInterest = rep(NA,length(SmithGConv$Schedule)); TraditionalInterest[1:length(Mtg$Interest)] = cumsum(Mtg$Interest)
-  SmithMtgInterest = rep(NA,length(SmithGConv$Schedule)); SmithMtgInterest[1:length(MtgSmith$Interest)] = cumsum(MtgSmith$Interest);
+  #SmithMtgInterest = rep(NA,length(SmithGConv$Schedule)); SmithMtgInterest[1:length(MtgSmith$Interest)] = cumsum(MtgSmith$Interest);
   TraditionalBalance = rep(NA,length(SmithGConv$Schedule)); TraditionalBalance[1:length(Mtg$Balance)] = Mtg$Balance
   SmithBalance = rep(NA,length(SmithGConv$Schedule)); SmithBalance[1:length(MtgSmith$Balance)] = MtgSmith$Balance;
   SmithPortfolio = rep(NA,length(SmithGConv$Schedule)); SmithPortfolio[1:length(SmithGConv$P2S)] = cumsum(SmithGConv$P2S)
   
   PortfCapital <- SmithPortfCapAppreciation (SmithGConv, SmithG)
   
+  #
+  # Total cost of the smith manoeuvre process includes:
+  # - The traditional cost = Home Mortgage Interest
+  # - The borrowing to invest cost = HELOC cost for re-advancing the Home Loan Principal (including both the portfolio and the Guerrilla portions)
+  # - We do not account for the few dollars associated to transfering funds between accounts (portfolio and Guerrilla)
+  #
+  TotalCostSM <- SmithGConv$HELOC*LoanStructure$HomeEquityLineOfCredit$AnnuelRate/12; # monthly HELOC cost (for both P2S and P2G)
+  TotalCostSM[1:length(MtgSmith$Interest)] <- TotalCostSM[1:length(MtgSmith$Interest)] + MtgSmith$Interest; # monthly Mortgage Interest
+  TotalCostSM <- cumsum(TotalCostSM); # Cumsum of everything
+  
   RenderData = c(TraditionalBalance, TraditionalInterest, SmithBalance, 
-                 SmithMtgInterest, SmithPortfolio, SmithGConv$HELOC, PortfCapital)
-  Label = c("Mort.Balance", "Mort.Interest", "Smith Mort.Balance", "Smith Mort.Interest", 
-            "Smith HELOC Portfolio", "Total HELOC converted to 0 debt", "Smith.Portfolio w/ Capital Appreciation")
+                 TotalCostSM, SmithGConv$HELOC, PortfCapital)
+  Label = c("Mort.Balance", "Mort.Interest", "Smith Mort.Balance", "Total Cost of Smith Manoeuvre (interest of Mortgage+HELOC)", 
+            "Total HELOC converted to 0 debt", "Smith.Portfolio w/ Capital Appreciation")
   XRef = SmithGConv$Schedule
   Title = paste("Mortgage Structure Vs Complete Smith Manoeuvre w/ Guerrilla and HELOC Portfolio Conversion to 0 debt accouting for Capital Appreciation"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   
