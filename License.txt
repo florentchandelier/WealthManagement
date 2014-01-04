@@ -1,3 +1,10 @@
+**********************************************************************************************************************************************
+++ NON-COMMERCIAL, ACADEMIC AND PERSONAL uses of the LICENSED WORK are governed by the terms of the following Adaptative Public License      *
+                                                                                                                                             *
+++ For COMMERCIAL use, please contact the Initial Contributor at XMPH.FOREX@GMAIL.COM. You may use the                                       *
+	PGP PUBLIC KEY BLOCK provided in PART 1 of this APL license to authenticate Initila Contributor.                                     *  
+**********************************************************************************************************************************************
+
 ADAPTIVE PUBLIC LICENSE
 Version 1.0
 
