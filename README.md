@@ -27,7 +27,7 @@ is the real ground on which one may assess the risk-dependency of different fina
 understand the nature of risk and its impact on one's quality of life.
 
 # INVESTMENT DISCLAIMER
-REFER TO [Investment Disclaimer, Risks and Warnings](WealthManagement/blob/master/RisksWarnings.md) FOR DETAILS.
+REFER TO [Investment Disclaimer, Risks and Warnings](RisksWarnings.md) FOR DETAILS.
 
 ## LICENSE
 [ADAPTIVE PUBLIC LICENSE V1.0](http://opensource.org/licenses/alphabetical) as stated in [LICENSE.txt](https://github.com/florentchandelier/WealthManagement/blob/master/License.txt) 
