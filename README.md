@@ -26,7 +26,7 @@ Beyond that statement, as I'm surprised no university research group came up wit
 is the real ground on which one may assess the risk-dependency of different financial plans, **in light of FPAs' experiences** in advising different individuals and families while assessing their real ability to 
 understand the nature of risk and its impact on one's quality of life.
 
-# INVESTMENT DISCLAIMER
+# INVESTMENT DISCLAIMER, RISKS and WARNINGS
 REFER TO [Investment Disclaimer, Risks and Warnings](RisksWarnings.md) FOR DETAILS.
 
 ## LICENSE
