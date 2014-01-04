@@ -30,3 +30,15 @@ No representation is being made that any account will or is likely to achieve pr
 social media sites and/or the Disclosing Party affiliates) by the Disclosing Party.
 
 Past performance is not indicative of future results.  
+
+# HYPOTHETICAL AND SIMULATED TRADING RESULTS
+
+Hypothetical or simulated performance results have certain inherent limitations unlike actual performance records: simulated results do not represent actual trading. Also, since the trades have not actually been executed, 
+the results may have under or over compensated of the impact, if any, of certain market factors, such as lack of liquidity. Simulated trading programs in general are also subject to the fact that they are designed with the 
+benefit of hindsight. No presentation is being made that any account will or is likely to achieve profits or losses similar to those predicted or shown.
+
+No representation is being made that any account will or is likely to achieve profits or losses similar to those shown in any simulation. In fact, there are frequently sharp differences between hypothetical performance 
+results and the actual results subsequently achieved by any trading program. One of the limitations of hypothetical performance results is that they are generally prepared with the benefit of hindsight. In addition, 
+hypothetical trading does not involve financial risk of actual trading. For example, the ability to withstand losses or to adhere to a particular trading program in spite of trading losses is material points which 
+can also adversely affect trading results. There are numerous other factors related to the markets in general or to the implementation of any specific trading program which cannot be fully accounted for in the preparation 
+of hypothetical performance results and all which can adversely affect actual trading results.
