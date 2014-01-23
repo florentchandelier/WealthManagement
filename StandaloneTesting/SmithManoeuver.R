@@ -474,6 +474,38 @@ SmithManoeuvre <- function ()
   
   DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
   
+  #
+  # Display the cost of the traditional mortgage versus the cost of the smith manoeuvre in terms of cash from one's pocket 
+  # In other words: what is the cost, for an individual, to set up the smith manoeuvre (different from what one will passthrough
+  # to the bank)
+  #
+  
+  NbComponents = 3
+  # traditional cost = interest + Mortgage = TraditionalInterest + TraditionalBalance
+  TradMortCost = rep(NA,length(SmithGConv$Schedule)); TradMortCost[1:length(Mtg$Balance)] <- MhtlyContrib;
+  TradMortCost[1:length(Mtg$Balance)] = cumsum(TradMortCost[1:length(Mtg$Balance)] )
+  
+  # Smith.M cost from your pocket perspective = 
+  # (TraditionalInterest + TraditionalBalance - Dividends - Tax return) + (interet HELOC + Mthly payment - dividends - tax return)
+  # TotalCostSM
+  SMCost = rep(0,length(SmithGConv$Schedule));
+  SMCost[length(Mtg$Balance):length(SmithGConv$Schedule)] = MhtlyContrib
+  # DO NOT CUMSUM(SMCost) HERE BECAUSE WE NEED IT FOR DETERMINING THE ADJUSTED NET BENEFITS FROM PORTFOLIO VALUE (SEE BELOW)
+  
+  # Net Benefit of Smith.M = Portfolio value - Diff(Cost(Traditional, Smith.M))
+  NetBenefits = PortfCapital
+  NetBenefits <- NetBenefits - cumsum(SMCost)
+  
+  # Display Plot
+  RenderData = c(TradMortCost, cumsum(SMCost), NetBenefits)
+  Label = c("Traditional Cost = Mthly Contribution over Mortgage duration", "SM Cost = Additional Ongoing Monthly Contribution toward HELOC", "Net Benefits: Portfolio - (additional SM Cost)")
+  XRef = SmithGConv$Schedule
+  Title = paste("SUMMARY: ROI for Smith Manoeuvre - Risk(Portfolio Return & Growth)"); YLegend = "Cost"; XLegend = "Calendar Years"
+  out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  
+  out + annotate("text", x = SmithGConv$Schedule[80], y = 500000, label = paste("Portfolio Characteristics: \nGrowth=",3,"%; Dividends=",4,"%"), size=3) + 
+        theme_set(theme_gray(base_size = 10))
+  
   # Output data
   return(  list(MortgageSchedule=Mtg$Schedule, 
                 MortgagePrincipal=cumsum(Mtg$Principal), MortgageInterest=cumsum(Mtg$Interest), MortgageBalance=Mtg$Balance,
