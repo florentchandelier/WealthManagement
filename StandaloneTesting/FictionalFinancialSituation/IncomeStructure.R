@@ -18,12 +18,12 @@ Income$GrossSalary <- 70000
 Income$CapGainTax <- 25/100
 #Income$Bonus <- LoanStructure$GrossSalary * 7/100 * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
 
-Income$Province <- 'qc'
+Income$Province <- 'on'
 Income$TaxPeriod <- 4 #April
 
-Income$SmithPortfYrlyDivYield <- 4/100 # dividend in $$ per share, divided by the price per share
+Income$SmithPortfYrlyDivYield <- 2/100 # dividend in $$ per share, divided by the price per share
 Income$SmithPortfContribDiv <- 1/2 # only half of new contribution to Portf contributes to End Of Year Dividend Gain.
-Income$SmithPortfYrlyCapitalAppreciationRate <- 3/100 # rise in the value of an asset STRICTLY based on a rise in market price
+Income$SmithPortfYrlyCapitalAppreciationRate <- 2/100 # rise in the value of an asset STRICTLY based on a rise in market price
 
 DebtRatioValidation <- function (Contribution, Salary=Income$GrossSalary)
 {
@@ -65,7 +65,7 @@ DividendTax <- function (DividendIncome=47888) # example from http://www.theglob
   return (DividendIncome-PocketedDiv)
 }
 
-InterestTaxRefund <- function (Province='qc', Amount=50000, EarnedDividends=-1) {
+InterestTaxRefund <- function (Province='qc', Amount=50000, EarnedDividends=-1, year) {
 # CALCULATION IS PERFORMED AT MARGINAL TAX RATE (MTR) applied to InterestExpenses (OK for dividend also) 
 # MTR = tax rate on the last dollar earned
 #  http://www.moneysense.ca/retire/delectable-dividends
@@ -96,7 +96,7 @@ InterestTaxRefund <- function (Province='qc', Amount=50000, EarnedDividends=-1) 
   # (1-x) to determine what is left after tax deduction for the manoeuvre
   FedEffectiveRefund = max(FedRates[FedBrackets<Income$GrossSalary]) * Amount
 
-#  QC
+#  QC - http://www.revenuquebec.ca/en/citoyen/impots/rens_comp/taux.aspx
 #  $41,095 or less   16%
 #  More than $41,095 but not more than $82,190   20%
 #  More than $82,190 But not more than $100,000 	24%
@@ -107,14 +107,23 @@ InterestTaxRefund <- function (Province='qc', Amount=50000, EarnedDividends=-1) 
     
     # (1-x) to determine what is left after tax deduction for the manoeuvre
     if (EarnedDividends>=0){
+      # IN QUEBEC, The amount of investment expenses you deduct cannot be greater than your investment income
+      # Effectively, deductibility is the dividends at most, unless interests lesser - min(amount, dividends)
       ProvEffectiveRefund = max(QcRates[QcBrackets<Income$GrossSalary]) * min(Amount, EarnedDividends)
+      
+      if (min(Amount, EarnedDividends) == EarnedDividends) {
+        tempAmount = format(Amount, decimal.mark=".",big.mark=",")
+        tempEarnedDividends = format(EarnedDividends, decimal.mark=".",big.mark=",")
+        print(paste(" Quebec limitation: investment expenses of $",tempAmount, "is limited to investment income (dividends) of $", tempEarnedDividends,  " for the year ", year))
+      }
+      
     } else {
       # return normal tax rate
       ProvEffectiveRefund = max(QcRates[QcBrackets<Income$GrossSalary]) * Amount
     }
-  }
+  } # END QC
 
-# ON
+# ON - http://www.fin.gov.on.ca/en/tax/pit/rates.html
 #  5.05% on the first $39,723 of taxable income, +
 #  9.15% on the next $39,725, +
 #  11.16% on the next $429,552, +
@@ -125,7 +134,7 @@ InterestTaxRefund <- function (Province='qc', Amount=50000, EarnedDividends=-1) 
     
     # (1-x) to determine what is left after tax deduction for the manoeuvre
     ProvEffectiveRefund = max(OnRates[OnBrackets<Income$GrossSalary]) * Amount
-  }
+  } #END ON
   
   return (Amount-FedEffectiveRefund-ProvEffectiveRefund)
 }
