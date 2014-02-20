@@ -18,12 +18,12 @@ Income$GrossSalary <- 70000
 Income$CapGainTax <- 25/100
 #Income$Bonus <- LoanStructure$GrossSalary * 7/100 * (1-Income$TaxRate) # assuming 48% tax on Gross Salary
 
-Income$Province <- 'on'
+Income$Province <- 'qc'
 Income$TaxPeriod <- 4 #April
 
-Income$SmithPortfYrlyDivYield <- 2/100 # dividend in $$ per share, divided by the price per share
+Income$SmithPortfYrlyDivYield <- 4/100 # dividend in $$ per share, divided by the price per share
 Income$SmithPortfContribDiv <- 1/2 # only half of new contribution to Portf contributes to End Of Year Dividend Gain.
-Income$SmithPortfYrlyCapitalAppreciationRate <- 2/100 # rise in the value of an asset STRICTLY based on a rise in market price
+Income$SmithPortfYrlyCapitalAppreciationRate <- 3/100 # rise in the value of an asset STRICTLY based on a rise in market price
 
 DebtRatioValidation <- function (Contribution, Salary=Income$GrossSalary)
 {

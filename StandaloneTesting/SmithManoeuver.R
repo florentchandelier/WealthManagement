@@ -9,6 +9,15 @@ sourceDir <- function (path, pattern = "\\.[rR]$", env = NULL, chdir = TRUE)
 sourceDir("StandaloneTesting/FictionalFinancialSituation/")
 source("StandaloneTesting/amortize.R")
 
+SmithManoeuvreGuerillaInit <- function (InitialDate)
+{
+  # P2S portion of the Principal (P) transfered to (2) the Smith (S) portfolio, accounting for Guerrilla interest capitalization
+  # P2G portion of the Principal (p) used for Guerrilla (G) interest capitalization
+  # - Portf: value of the P2S portfolio accounting for Capital Appreciation
+  structure <- list(Schedule=InitialDate, P2S=0, P2G=0, PeriodicInterest=0,
+                    InterestTaxRefund=0, PortfYrlyDiv = 0, Portf = 0)
+  return(structure)
+}
 
 SmithGuerrilla <- function (MortgageStructure, RollingCum=0, RollingInterest=0,
                             PercentConversion = 100/100, 
