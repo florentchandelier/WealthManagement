@@ -257,7 +257,7 @@ PostSmithGuerilla_Conversion <- function (MhtlyContrib, Smith, LeftOverBalanceRe
         InterestExpenses = HELOCtemp * LoanStructure$HomeEquityLineOfCredit$AnnuelRate
       }
       
-      InterestTaxRefund <- InterestTaxRefund(Income$Province, InterestExpenses, max(Smith$PortfYrlyDiv))
+      InterestTaxRefund <- InterestTaxRefund(Income$Province, InterestExpenses, max(Smith$PortfYrlyDiv), year(PayDay))
       HELOCtemp <- HELOCtemp - InterestTaxRefund;
       
     }
@@ -356,7 +356,7 @@ SmithManoeuvre <- function ()
     InterestExpenses = (LoanStructure$HomeEquityLineOfCredit$AnnuelRate * length(SMGTemp$P2G) / 12) * 
       (max(cumsum(SMGTemp$P2G+SMGTemp$P2S))+max(cumsum(SmithG$P2G+SmithG$P2S)))
     
-    SMGTemp$InterestTaxRefund <- InterestTaxRefund(Income$Province, InterestExpenses, SMGTemp$PortfYrlyDiv)
+    SMGTemp$InterestTaxRefund <- InterestTaxRefund(Income$Province, InterestExpenses, SMGTemp$PortfYrlyDiv, year(MtgSmith$Schedule[length(MtgSmith$Schedule)]))
     
     
     #
@@ -458,12 +458,17 @@ SmithManoeuvre <- function ()
   
   RenderData = c(TraditionalBalance, TraditionalInterest, SmithBalance, 
                  TotalCostSM, SmithGConv$HELOC, PortfCapital)
-  Label = c("Mort.Balance", "Mort.Interest", "Smith Mort.Balance", "Total Cost of Smith Manoeuvre (interest of Mortgage+HELOC)", 
-            "Total HELOC converted to 0 debt", "Smith.Portfolio w/ Capital Appreciation")
+  Label = c("Traditional Mort.Balance", "Traditional Mort.Interest", "Smith Mort.Balance", "Total Smith Interests (Mortgage+HELOC)", 
+            "HELOC growth converted to 0 debt", "Smith.Portfolio w/ Capital Appreciation")
   XRef = SmithGConv$Schedule
-  Title = paste("Mortgage Structure Vs Complete Smith Manoeuvre w/ Guerrilla and HELOC Portfolio Conversion to 0 debt accouting for Capital Appreciation"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
+  Title = paste("Mortgage Structure Vs Smith Manoeuvre w/ Guerrilla & HELOC Portfolio Conversion to 0 debt accouting for Capital Appreciation"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   
-  DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  xAn = SmithGConv$Schedule[(6/8)*length(SmithGConv$Schedule)] ; yAn = max(PortfCapital);
+  theme_set(theme_gray(base_size = 13))
+  out + annotate("text", x = xAn, y = yAn, label = 
+      paste("Portfolio Characteristics: \nGrowth=", 100*Income$SmithPortfYrlyCapitalAppreciationRate,"%; Div=",
+                                                    100*Income$SmithPortfYrlyDivYield,"%"), size=4, hjust=0)
   
   #
   # Display the cost of the traditional mortgage versus the cost of the smith manoeuvre in terms of cash from one's pocket 
@@ -491,11 +496,21 @@ SmithManoeuvre <- function ()
   RenderData = c(TradMortCost, cumsum(SMCost), NetBenefits)
   Label = c("Traditional Cost = Mthly Contribution over Mortgage duration", "SM Cost = Additional Ongoing Monthly Contribution toward HELOC", "Net Benefits: Portfolio - (additional SM Cost)")
   XRef = SmithGConv$Schedule
-  Title = paste("SUMMARY: ROI for Smith Manoeuvre - Risk(Portfolio Return & Growth)"); YLegend = "Cost"; XLegend = "Calendar Years"
+  Title = paste("SUMMARY: Additional Cost and ROI for setting a Smith Manoeuvre"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  xAn = SmithGConv$Schedule[(6/8)*length(SmithGConv$Schedule)] ; yAn = (4/5)*max(NetBenefits);
+  theme_set(theme_gray(base_size = 15))
+  out + annotate("text", x = xAn, y = yAn, label = 
+                   paste("Portfolio Characteristics: \nGrowth=", 100*Income$SmithPortfYrlyCapitalAppreciationRate,"%; Div=",
+                         100*Income$SmithPortfYrlyDivYield,"%"), size=4, hjust=0)
   
-  out + annotate("text", x = SmithGConv$Schedule[80], y = 500000, label = paste("Portfolio Characteristics: \nGrowth=",3,"%; Dividends=",4,"%"), size=3) + 
-        theme_set(theme_gray(base_size = 10))
+  print(paste("In ",Income$Province, " Home mortgage repayment was anticipated by ", (max(Mtg$Schedule)-max(MtgSmith$Schedule))/365, " years"))
+  print(paste("In ",Income$Province, " Completion of the Smith Manoeuvre involved an additional ", (max(SmithGConv$Schedule)-max(Mtg$Schedule))/365, " years compared to the original home mortgage loan"))
+  temp = format(max(cumsum(SMCost)), digits=9, decimal.mark=".",big.mark=",")
+  print(paste("In ",Income$Province, " The additional cost for performing the Smith Manoeuvre from a debtor pocket perspective is $", temp))
+  temp = format(max(PortfCapital), digits=9, decimal.mark=".",big.mark=",")
+  print(paste("In ",Income$Province, " The value of the Equity Portfolio deriving from the Smith Manoeuvre is $", temp, " under the assumption of capital appreciation per annum ", 100*Income$SmithPortfYrlyCapitalAppreciationRate , "% and dividend yield per annum ", 
+              100*Income$SmithPortfYrlyDivYield, "%"))
   
   # Output data
   return(  list(MortgageSchedule=Mtg$Schedule, 
@@ -503,6 +518,7 @@ SmithManoeuvre <- function ()
              SMwG_Schedule=MtgSmith$Schedule,
                 SMwG_Principal=cumsum(MtgSmith$Principal), SMwG_Interest=cumsum(MtgSmith$Interest), SMwG_Balance=MtgSmith$Balance,
              SMwG_PortSchedule=SmithGConv$Schedule,
-             SMwG_PortfCapitalAppreciation=SmithGConv$P2S, SMwG_HELOCPortfConversion=SmithGConv$HELOC, SMwG_PortfDiv=SmithGConv$PortfYrlyDiv)
-        )
+             SMwG_PortfCapitalAppreciation=SmithGConv$P2S, SMwG_HELOCPortfConversion=SmithGConv$HELOC, SMwG_PortfDiv=SmithGConv$PortfYrlyDiv,
+             SMwG_DebtorCost=max(cumsum(SMCost)), SMwG_Portfolio=max(cumsum(PortfCapital))
+        ))
 }
