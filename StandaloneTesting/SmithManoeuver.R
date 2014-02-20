@@ -332,7 +332,8 @@ SmithManoeuvre <- function ()
   Title = paste("Traditional Mortgage Structure"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   XRef = Mtg$Schedule
   
-  DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  plot(out)
   
   #######################################################################
   # Mortgage combined with Smith Manoeuvre a la Guerrilla Capitalization
@@ -401,7 +402,8 @@ SmithManoeuvre <- function ()
   Title = paste("Smith Manoeuvre with Guerrilla Capitalization, Mortgage component only"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   XRef = MtgSmith$Schedule
   
-  DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  plot(out)
   if (abs(max(cumsum(SmithG$P2S))-LeftOverSmithAction +max(cumsum(SmithG$P2G)) - LoanStructure$Loan$Value) > 10)
   {print(" ERROR: P2S + P2G NOT EQUAL total loan after smith conversion"); return(187);} 
   
@@ -436,7 +438,8 @@ SmithManoeuvre <- function ()
   Title = paste("Mortgage Structure Versus Smith w/ Guerrilla"); YLegend = "Cash Flow"; XLegend = "Calendar Years"
   XRef = Mtg$Schedule
   
-  DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
+  plot(out)
   
   ############################################################################################################
   # Complete Smith Manoeuvre w/ Guerrilla Capitalization, and Conversion of the ReAdvanced Mortgage-Principal 
@@ -475,9 +478,8 @@ SmithManoeuvre <- function ()
   out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
   xAn = SmithGConv$Schedule[(6/8)*length(SmithGConv$Schedule)] ; yAn = max(PortfCapital);
   theme_set(theme_gray(base_size = 13))
-  out + annotate("text", x = xAn, y = yAn, label = 
-      paste("Portfolio Characteristics: \nGrowth=", 100*Income$SmithPortfYrlyCapitalAppreciationRate,"%; Div=",
-                                                    100*Income$SmithPortfYrlyDivYield,"%"), size=4, hjust=0)
+  plot(out + annotate("text", x = xAn, y = yAn, label = paste("Portfolio Characteristics: \nGrowth=", 
+          100*Income$SmithPortfYrlyCapitalAppreciationRate,"%; Div=",100*Income$SmithPortfYrlyDivYield,"%"), size=4, hjust=0))
   
   #
   # Display the cost of the traditional mortgage versus the cost of the smith manoeuvre in terms of cash from one's pocket 
@@ -509,9 +511,9 @@ SmithManoeuvre <- function ()
   out = DisplayMortgage(NbComponents, RenderData, Label, XRef, Title, YLegend, XLegend)
   xAn = SmithGConv$Schedule[(6/8)*length(SmithGConv$Schedule)] ; yAn = (4/5)*max(NetBenefits);
   theme_set(theme_gray(base_size = 15))
-  out + annotate("text", x = xAn, y = yAn, label = 
+  plot(out + annotate("text", x = xAn, y = yAn, label = 
                    paste("Portfolio Characteristics: \nGrowth=", 100*Income$SmithPortfYrlyCapitalAppreciationRate,"%; Div=",
-                         100*Income$SmithPortfYrlyDivYield,"%"), size=4, hjust=0)
+                         100*Income$SmithPortfYrlyDivYield,"%"), size=4, hjust=0))
   
   print(paste("In ",Income$Province, " Home mortgage repayment was anticipated by ", (max(Mtg$Schedule)-max(MtgSmith$Schedule))/365, " years"))
   print(paste("In ",Income$Province, " Completion of the Smith Manoeuvre involved an additional ", (max(SmithGConv$Schedule)-max(Mtg$Schedule))/365, " years compared to the original home mortgage loan"))

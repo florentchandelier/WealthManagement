@@ -106,7 +106,7 @@ DisplayMortgage <- function(NbComponents, RenderData, Label, XRef, Title, YLegen
   fmtExpLg10 <- function(x) paste(round_any(x/1000, 0.01) , "K $", sep="")
   p <- p + scale_y_continuous(label=fmtExpLg10)
   p <- p + ggtitle(Title) + ylab(YLegend) + xlab(XLegend)
-  print(p)
+  #plot(p)
   
   return(p)
 }
