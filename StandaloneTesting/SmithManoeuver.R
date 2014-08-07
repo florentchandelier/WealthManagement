@@ -353,10 +353,20 @@ SmithManoeuvre <- function ()
     
     MtgSmith <- mapply(c, MtgSmith, MtgTemp, SIMPLIFY=FALSE)
     
+    ################################
+    # LAZY SM COSTS APPROXIMATION
+    # The LazySM involves using the bank back-end sytem to automatically withdraw the required interest from the principal, thus
+    # automating the Guerrilla component. But nothing comes for free, so the periodic principal sits in a checking account for 
+    # about a month prior the bank back-end system withdraw said interest amount, although interests are already running.
+    #
+    # Considering we hypothesized in the code that only half of the contributions will end up effectively contributing to the
+    # portfolio annual dividends, we implicitely cover the *case* of delayed contribution on (Dividends) - The *case* for 
+    # portfolio capital appreciation is negligeable.
+    
     # determining the Dividend gain for the year from the current portfolio, assuming only 1/2 of the current
     # year "fresh cash" contributes to these dividends (hypothesizing that dividend schedules and cash deposits may
     # not be ideal based on dividend pay-dates).
-    SMGTemp$PortfYrlyDiv <- SmithPortfYieldAdjusted(SmithG, max(cumsum(SMGTemp$P2S)) )
+    SMGTemp$PortfYrlyDiv <- SmithPortfYieldAdjusted(SmithG, cumsum(SMGTemp$P2S)[floor(length(SMGTemp$P2S)/2)] )
     
     #
     # determining the Tax Refund one may claim "for an investment loan"
@@ -364,7 +374,20 @@ SmithManoeuvre <- function ()
     #
     
     InterestExpenses = (LoanStructure$HomeEquityLineOfCredit$AnnuelRate * length(SMGTemp$P2G) / 12) * 
-      (max(cumsum(SMGTemp$P2G+SMGTemp$P2S))+max(cumsum(SmithG$P2G+SmithG$P2S)))
+      ( max(cumsum(SMGTemp$P2G+SMGTemp$P2S))+max(cumsum(SmithG$P2G+SmithG$P2S)) )
+    
+    ################################
+    # LAZY SM COSTS APPROXIMATION
+    # For tax purposes, one may only claim deduction once the principal is invested, that is differed by one month in our
+    # lazySM scenario.
+    #
+    # Considering each principal contribution to the SM portfolio is delayed by one month, we approximat the cost of the LazySM
+    # by removing the interest equivalent to 12 month of (mean of annual contributions)
+    #
+    if (LoanStructure$LazySM == TRUE) {
+      TempSchedSize = length(SMGTemp$P2G)      
+      InterestExpenses = InterestExpenses - mean(SMGTemp$P2S) * (LoanStructure$HomeEquityLineOfCredit$AnnuelRate * length(SMGTemp$P2G) / 12)
+    }
     
     SMGTemp$InterestTaxRefund <- InterestTaxRefund(Income$Province, InterestExpenses, SMGTemp$PortfYrlyDiv, year(MtgSmith$Schedule[length(MtgSmith$Schedule)]))
     

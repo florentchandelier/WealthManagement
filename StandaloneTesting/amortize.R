@@ -18,6 +18,7 @@ Compounding <- function (Amount, Rate, NbPeriods, Forward=TRUE)
 
 InvestmentPerfCompounded <- function (Amount, Rate, NbYearsContrib, NbYearsCompound) {
 # res = InvestmentPerfCompounded(15000, 15/100, 11, 65-34); formatC(res, format="d", big.mark=',')
+# THE THINKING IS WRONG - CAPITAL TAX OCCUR ONLY WHEN SELLING STOCKS, THUS BUY AND HOLD WOULD NOT HAVE CAPITAL GAIN
  
   CapTaxGain = 0.79 # http://en.wikipedia.org/wiki/Capital_gains_tax#Canada
   Tot = Amount*(1+Rate)
